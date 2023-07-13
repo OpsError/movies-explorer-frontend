@@ -1,0 +1,43 @@
+.main__about-me {
+    margin: 110px 70px 125px 70px;
+}
+
+.about-me__container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 66px;
+}
+
+.about-me__name {
+    font-size: 50px;
+    font-weight: 400;
+    line-height: 1.16;
+    margin: 0;
+}
+
+.about-me__profession {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: normal;
+    margin: 18px 0 0;
+}
+
+.about-me__bio {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.57;
+    margin: 26px 0 0;
+    max-width: 600px;
+}
+
+.about-me__link {
+    margin: 100px 0 0;
+}
+
+.about-me__github {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: normal;
+    text-decoration: none;
+    color: #000;
+}

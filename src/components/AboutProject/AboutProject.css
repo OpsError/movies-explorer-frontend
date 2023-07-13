@@ -1,0 +1,65 @@
+.main__about {
+    margin: 110px 70px;
+}
+
+.section__header {
+    font-size: 22px;
+    font-weight: 400;
+    line-height: normal;
+    padding-bottom: 23px;
+    border-bottom: 1px solid #000;
+    margin: 0;
+}
+
+.about__description {
+    margin-top: 70px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.about__headline {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.about__explanation {
+    margin: 26px 0 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+    max-width: 550px;
+}
+
+.about__deadlines {
+    margin-top: 110px;
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+}
+
+.about__time {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.21;
+    color: #A0A0A0;
+    margin: 0;
+    text-align: center;
+    padding-top: 14px;
+}
+
+.about__time_background_gray, .about__time_backgroung_black {
+    line-height: normal;
+    font-weight: 400;
+    padding: 9px 0;
+}
+
+.about__time_backgroung_black {
+    background-color: #000;
+    color: #fff;
+}
+
+.about__time_background_gray {
+    background-color: #F2F2F2;
+    color: #000;
+}

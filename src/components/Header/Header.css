@@ -1,0 +1,47 @@
+.header {
+    background-color: #F3C1F8;
+    max-height: 74px;
+    padding-bottom: 50px;
+}
+
+a, button {
+    transition: opacity .3s linear;
+}
+
+a:hover {
+    opacity: .7;
+}
+
+button:hover {
+    opacity: .8;
+}
+
+.header__background_color_transparent {
+    background-color: transparent;
+}
+
+.header__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 70px;
+}
+
+.header__movies {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.38;
+    text-decoration: none;
+    color: #000;
+    margin: 0 16px 0 44px;
+}
+
+.header__movies_weight_regular {
+    font-weight: 400;
+    margin: 0;
+}
+
+.header__menu {
+    display: flex;
+    align-items: center;
+}
