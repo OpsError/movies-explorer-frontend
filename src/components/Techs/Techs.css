@@ -3,6 +3,19 @@
     background-color: #F5F5F5;
 }
 
+@media screen and (max-width: 768px) {
+    .main__techs {
+        padding: 90px 50px;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .main__techs {
+        background-color: #FFF;
+        padding: 70px 18px;
+    }   
+}
+
 .techs__content {
     display: flex;
     flex-direction: column;
@@ -10,11 +23,32 @@
     margin-top: 90px;
 }
 
+@media screen and (max-width: 768px) {
+    .techs__content {
+        margin-top: 80px;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .techs__content {
+        margin-top: 60px;
+    }   
+}
+
 .techs__header {
     margin: 0;
     font-size: 50px;
     font-weight: 400;
     line-height: 1.16;
+    letter-spacing: -2px;
+}
+
+@media screen and (max-width: 650px) {
+    .techs__header {
+        font-size: 30px;
+        line-height: normal;
+        letter-spacing: -1.2px;
+    }   
 }
 
 .techs__description {
@@ -22,8 +56,26 @@
     font-size: 14px;
     font-weight: 400;
     line-height: 1.42;
+    letter-spacing: -0.56px;
     max-width: 460px;
     text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+    .techs__description {
+        font-size: 12px;
+        line-height: 1.5;
+        margin-top: 22px;
+        letter-spacing: -0.48px;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .techs__description {
+        font-size: 11px;
+        line-height: 1.45;
+        letter-spacing: -0.44px;
+    }
 }
 
 .techs__list {
@@ -32,6 +84,22 @@
     column-gap: 10px;
     padding: 0;
     margin: 100px 0 0;
+}
+
+@media screen and (max-width: 768px) {
+    .techs__list {
+        margin-top: 83px;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .techs__list {
+        margin-top: 50px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 10px;
+        row-gap: 10px;
+    }   
 }
 
 .techs__element {
@@ -43,4 +111,13 @@
     font-size: 14px;
     font-weight: 400;
     line-height: normal;
+    letter-spacing: -0.56px;
+}
+
+@media screen and (max-width: 768px) {
+    .techs__element {
+        width: 84px;
+        letter-spacing: -0.48px;
+        font-size: 12px;
+    }
 }

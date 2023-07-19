@@ -14,3 +14,6 @@ body {
 @import url('../AboutMe/AboutMe.css');
 @import url('../Portfolio/Portfolio.css');
 @import url('../Footer/Footer.css');
+@import url('../Register/Register.css');
+@import url('../AuthForm/AuthForm.css');
+@import url('../Profile/Profile.css');

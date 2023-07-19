@@ -10,17 +10,17 @@ function Portfolio() {
             <ul className="portfolio__list">
                 <Link to="https://github.com/OpsError/how-to-learn" className="portfolio__site" target="_blank">
                     Статичный сайт
-                    <img src={arrowIcon} alt="Стрелочка для перехода на сайт" />
+                    <p className="portfolio__arrow-icon">↗</p>
                 </Link>
 
                 <Link to="https://github.com/OpsError/russian-travel" className="portfolio__site" target="_blank">
                     Адаптивный сайт
-                    <img src={arrowIcon} alt="Стрелочка для перехода на сайт" />
+                    <p className="portfolio__arrow-icon">↗</p>
                 </Link>
 
                 <Link to="https://github.com/OpsError/react-mesto-api-full-gha" className="portfolio__site" target="_blank">
                     Одностраничное приложение
-                    <img src={arrowIcon} alt="Стрелочка для перехода на сайт" />
+                    <p className="portfolio__arrow-icon">↗</p>
                 </Link>
             </ul>
         </div>
