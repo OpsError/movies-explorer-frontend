@@ -7,19 +7,15 @@ function Header(props) {
     const authorized = props.authorized;
     const location = useLocation();
 
-    const headerRegister = location.pathname === '/signup' ? "header_register" : "";
-    const containerRegister = location.pathname === '/signup' ? "header__container_register" : "";
-
-    const headerLogin = location.pathname === '/signin' ? "header_register" : "";
-    const containerLogin = location.pathname === '/signin' ? "header__container_register" : "";
+    const containerAuth = ['/signup', '/signin'].includes(location.pathname) ? 'header__container_register' : '';
+    const headerAuth = ['/signup', '/signin'].includes(location.pathname) ? 'header_register' : '';
 
     const containerProfile = location.pathname === '/profile' ? "header__container_profile" : "";
-
     const headerMain = location.pathname === '/' ? "header__background_color_purple" : "";
 
     return(
-        <header className={ `header ${headerMain} ${headerRegister} ${headerLogin}` } >
-            <div className={ `header__container ${containerRegister} ${containerLogin} ${containerProfile}` }>
+         location.pathname !== '/404' && <header className={ `header ${headerMain} ${headerAuth}` } >
+            <div className={ `header__container ${containerAuth} ${containerProfile}` }>
                 <Link to="/">
                     <img src={logo} alt="Логотип" className="header__logo" />
                 </Link>
@@ -36,9 +32,6 @@ function Header(props) {
                 <Navigation authorized={authorized} />
 
             </div>
-
-            
-
         </header>
     );
 }

@@ -1,10 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Footer() {
     const actualYear = new Date();
+    const location = useLocation();
 
     return(
+        ['/main', '/movies', '/saved-movies', '/'].includes(location.pathname) && 
         <footer className="footer">
             <p className="footer__header">Учебный проект Яндекс.Практикум х BeatFilm.</p>
 

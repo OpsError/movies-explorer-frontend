@@ -1,0 +1,83 @@
+.list {
+    margin-top: 81px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media screen and (max-width: 425px) {
+    .list {
+        margin-top: 50px;
+    }
+}
+
+.list__container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 364px);
+    row-gap: 39px;
+    column-gap: 24px;
+}
+
+@media screen and (max-width: 1160px) {
+    .list__container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 790px) {
+    .list__container {
+        grid-template-columns: repeat(2, 339px);
+        row-gap: 30px;
+        column-gap: 30px;
+    }
+}
+
+@media screen and (max-width: 720px) {
+    .list__container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .list__container {
+        grid-template-columns: 300px;
+        row-gap: 13px;
+    }
+}
+
+.list__button {
+    margin-top: 60px;
+    width: 320px;
+    background-color: transparent;
+    border: 1px solid #E8E8E8;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: normal;
+    padding: 11px 0 9px 0;
+}
+
+@media screen and (max-width: 768px) {
+    .list__button {
+        margin-top: 80px;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .list__button {
+        width: 240px;
+        margin-top: 76px;
+    }
+}
+
+.list__button_disable {
+    overflow: hidden;
+    opacity: 0;
+    cursor: auto;
+}
+
+.list__button_disable:hover {
+    opacity: 0;
+    overflow: hidden;
+}

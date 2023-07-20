@@ -88,20 +88,6 @@ button:hover {
     }
 }
 
-.header__movies {
-    font-weight: 500;
-    font-size: 13px;
-    line-height: 1.38;
-    text-decoration: none;
-    color: #000;
-    margin: 0 16px 0 44px;
-}
-
-.header__movies_weight_regular {
-    font-weight: 400;
-    margin: 0;
-}
-
 .header__menu {
     display: flex;
     align-items: center;

@@ -2,12 +2,12 @@ import React from "react";
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 import account from '../../images/logo_account.svg';
 import closeIcon from '../../images/close-icon.svg';
+import menuIcon from '../../images/mune-icon.svg'
 
 function Navigation(props) {
     const location = useLocation();
 
-    const navigationRegister = location.pathname === '/signup'? 'navigation__list_disabled' : "";
-    const navigationLogin = location.pathname === '/signin'? 'navigation__list_disabled' : "";
+    const navigationDisable = ['/signup', '/signin'].includes(location.pathname) ? 'navigation__list_disabled' : '';
 
     const [openMenu, setOpenMenu] = React.useState(false);
 
@@ -19,17 +19,20 @@ function Navigation(props) {
     const overlayEnable = openMenu? 'navigation__overlay_animation' : '';
     const menuVisible = openMenu? 'navigation__navbar_menu_visible' : '';
 
-    const mainLink = location.pathname === '/' ? 'navigation__menu-link_border' : '';
-    const movieLink = location.pathname === '/movies' ? 'navigation__menu-link_border' : '';
-    const savedMoviesLink = location.pathname === '/saved-movies' ? 'navigation__menu-link_border' : '';
+    const linkBorder = ['/', '/movies', 'saved-movies'].includes(location.pathname) ? 'navigation__menu-link_border' : '';
+
+    const linkBold = ['/movies', '/saved-movies'].includes(location.pathname) ? 'navigation__movies_weight_bold' : '';
     return(
-        <div className={`navigation__list ${navigationRegister} ${navigationLogin}`}>
-            {!openMenu && <button className="navigation__navbar-button" onClick={toggleMenu} />}
+        <div className={`navigation__list ${navigationDisable}`}>
+            {!openMenu && 
+                <button className="navigation__navbar-button" onClick={toggleMenu}>
+                    <img src={menuIcon} alt="Иконка меню" className="navigation__navbar-button_icon" />
+                </button>}
             {props.authorized?
                 <div className="navigation__menu">
-                    <div>
-                        <Link to="/" className="header__movies">Фильмы</Link>
-                        <Link to="/movies" className="header__movies header__movies_weight_regular">Сохранённые фильмы</Link>
+                    <div className="navigation__movies-link">
+                        <Link to="/movies" className={`navigation__movies ${linkBold}`}>Фильмы</Link>
+                        <Link to="/saved-movies" className={`navigation__movies ${linkBold}`}>Сохранённые фильмы</Link>
                     </div>
                     <Link to="/profile">
                         <button className="navigation__account-button">
@@ -60,9 +63,9 @@ function Navigation(props) {
                         </div>
                         
                         <div className="navigation__little-nav">
-                            <Link to='/movies' onClick={toggleMenu} className={`navigation__menu-link ${mainLink}`}>Главная</Link>
-                            <Link to='/movies' onClick={toggleMenu} className={`navigation__menu-link ${movieLink}`}>Фильмы</Link>
-                            <Link to='/movies' onClick={toggleMenu} className={`navigation__menu-link ${savedMoviesLink}`}>Сохранённые фильмы</Link>
+                            <Link to='/' onClick={toggleMenu} className={`navigation__menu-link ${linkBorder}`}>Главная</Link>
+                            <Link to='/movies' onClick={toggleMenu} className={`navigation__menu-link ${linkBorder}`}>Фильмы</Link>
+                            <Link to='/saved-movies' onClick={toggleMenu} className={`navigation__menu-link ${linkBorder}`}>Сохранённые фильмы</Link>
                         </div>
                         <Link to="/profile" onClick={toggleMenu} className="navigation__menu-account">
                             <button className="navigation__account-button">

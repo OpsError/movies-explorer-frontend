@@ -1,5 +1,4 @@
 import React from "react";
-import arrowIcon from '../../images/arrow-icon.svg'
 import { Link } from "react-router-dom";
 
 function Portfolio() {
