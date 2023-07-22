@@ -1,25 +1,48 @@
 import React from "react";
 import AuthForm from "../AuthForm/AuthForm";
+import validateInput from '../../utils/ValidateInput';
 
 function Register() {
+    const [formValue, setFormValue] = React.useState({
+        name: 'Виталий',
+        password: '123456789'
+    });
+    const [isInvalidName, setIsInvalidName] = React.useState(false);
+    const [isInvalidPassword, setIsInvalidPassword] = React.useState(false);
+
+    function handleChange(e) {
+        const {name, value} = e.target;
+        setFormValue({
+            ...formValue,
+            [name]: value
+        });
+        if (name === 'name') {
+            setIsInvalidName(validateInput(value));
+        }
+
+        if (name === 'password') {
+            setIsInvalidPassword(validateInput(value));
+        }
+        
+    }
     return(
             <AuthForm section="register" buttonText="Зарегистрироваться" text="Уже зарегистрированы?" linkText="Войти" path="/signin">
                 <div className="form__element">
                     <label className="form__headline">Имя</label>
-                    <input className="form__input" required type="text" defaultValue="Виталий" placeholder="Имя" />
-                    <span className="form__error"></span>
+                    <input className={`form__input ${isInvalidName && 'form__input_error'}`} required name="name" type="text" value={formValue.name} placeholder="Имя" onChange={handleChange} />
+                    <span className="form__error">{isInvalidName && 'Минимальная длина имени -- 3 символа'}</span>
                 </div>
 
                 <div className="form__element">
                     <label className="form__headline">E-mail</label>
-                    <input className="form__input" required type="email" defaultValue="pochta@yandex.ru" placeholder="Почта" />
+                    <input className="form__input" required name="email" type="email" defaultValue="pochta@yandex.ru" placeholder="Почта" />
                     <span className="form__error"></span>
                 </div>
 
                 <div className="form__element">
                     <label className="form__headline">Пароль</label>
-                    <input className="form__input form__input_error" required type="password" defaultValue="123456789" placeholder="Пароль" />
-                    <span className="form__error">Что-то пошло не так...</span>
+                    <input className={`form__input ${isInvalidPassword && 'form__input_error'}`} required name="password" type="password" value={formValue.password} placeholder="Пароль" onChange={handleChange} />
+                    <span className="form__error">{isInvalidPassword && 'Минимальная длина пароля -- 3 символа'}</span>
                 </div>
             </AuthForm>
     );

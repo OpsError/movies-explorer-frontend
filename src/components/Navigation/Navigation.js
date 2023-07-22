@@ -47,7 +47,7 @@ function Navigation(props) {
                     </Link>
                 </section> 
             } 
-            { location.pathname === '/' &&
+            { location.pathname === '/' && !props.authorized &&
                 <nav className="navigation__auth">
                     <Link to="signup" className="navigation__link">Регистрация</Link>
                     <Link to="signin">

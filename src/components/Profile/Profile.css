@@ -103,6 +103,10 @@
     line-height: normal;
 }
 
+.profile__input_error {
+    color: #FF004C;
+}
+
 .profile__links {
     margin-top: 220px;
     width: 410px;
