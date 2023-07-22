@@ -2,8 +2,8 @@ import React from "react";
 
 function AboutProject() {
     return(
-        <div className="main__about">
-            <h2 className="section__header">О проекте</h2>
+        <div className="main__about about">
+            <h2 className="about__header header-section">О проекте</h2>
             <div className="about__description">
                 <div className="about__list">
                     <h3 className="about__headline">Дипломный проект включал 5 этапов</h3>

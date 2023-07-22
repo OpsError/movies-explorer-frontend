@@ -5,10 +5,10 @@ import savedMovies from '../../utils/saved-movies';
 
 function SavedMovies() {
     return(
-        <section className="saved">
+        <main className="saved">
             <SearchForm />
-            <MoviesCardList list={savedMovies.slice(1,3)} />
-        </section>
+            <MoviesCardList list={savedMovies.slice(0,3)} />
+        </main>
     );
 }
 

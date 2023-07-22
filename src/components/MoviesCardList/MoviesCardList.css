@@ -17,6 +17,9 @@
     grid-template-columns: repeat(3, 364px);
     row-gap: 39px;
     column-gap: 24px;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 }
 
 @media screen and (max-width: 1160px) {

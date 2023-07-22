@@ -11,13 +11,13 @@ button:hover {
 }
 
 @media screen and (max-width: 768px) {
-    .navigation__list {
+    .navigation {
         display: flex;
         justify-content: flex-end
     }
 }
 
-.navigation__list_disabled {
+.navigation_disabled {
     display: none;
     width: 0;
 }
@@ -110,12 +110,12 @@ button:hover {
     }
 }
 
-.navigation__navbar-button {
+.navigation__button-navbar {
     display: none;
 }
 
 @media screen and (max-width: 768px) {
-    .navigation__navbar-button {
+    .navigation__button-navbar {
         display: block;
         width: 44px;
         height: 44px;
@@ -126,13 +126,13 @@ button:hover {
 }
 
 @media screen and (max-width: 425px) {
-    .navigation__navbar-button {
+    .navigation__button-navbar {
         width: 40px;
         height: 43px;
     }
 }
 
-.navigation__navbar-button_icon {
+.navbar__button-icon {
     width: 100%;
 }
 
@@ -168,7 +168,7 @@ button:hover {
 }
 
 @media screen and (max-width: 768px) {
-    .navigation__navbar_menu {
+    .navigation__navbar-menu {
         position: fixed;
         width: 520px;
         height: 100vh;
@@ -188,7 +188,7 @@ button:hover {
 }
 
 @media screen and (max-width: 530px) {
-    .navigation__navbar_menu {
+    .navigation__navbar-menu {
         padding: 14px;
         width: 100vw;
         transform: translateX(100vw);
@@ -197,17 +197,21 @@ button:hover {
 }
 
 @media screen and (max-width: 768px) {
-    .navigation__navbar_menu_visible {
+    .navigation__navbar-menu_visible {
         transform: translateX(0px);
     }
 }
 
 .navigation__container-icon {
     margin-bottom: 109px;
+    padding: 0;
+    background-color: transparent;
+    border: 0;
     width: 30px;
     height: 30px;
     align-self: end;
 }
+
 
 @media screen and (max-width: 530px) {
     .navigation__container-icon {

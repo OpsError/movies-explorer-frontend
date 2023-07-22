@@ -35,7 +35,7 @@
     }   
 }
 
-.techs__header {
+.techs__name {
     margin: 0;
     font-size: 50px;
     font-weight: 400;
@@ -44,7 +44,7 @@
 }
 
 @media screen and (max-width: 650px) {
-    .techs__header {
+    .techs__name {
         font-size: 30px;
         line-height: normal;
         letter-spacing: -1.2px;
@@ -92,7 +92,7 @@
     }
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 800px) {
     .techs__list {
         margin-top: 50px;
         display: grid;
@@ -114,7 +114,7 @@
     letter-spacing: -0.56px;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 835px) {
     .techs__element {
         width: 84px;
         letter-spacing: -0.48px;

@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 
 function Portfolio() {
     return(
-        <div className="about-me__portfolio">
+        <div className="about-me__portfolio portfolio">
             <h3 className="portfolio__header">Портфолио</h3>
 
-            <ul className="portfolio__list">
+            <nav className="portfolio__list">
                 <Link to="https://github.com/OpsError/how-to-learn" className="portfolio__site" target="_blank">
                     Статичный сайт
                     <p className="portfolio__arrow-icon">↗</p>
@@ -21,7 +21,7 @@ function Portfolio() {
                     Одностраничное приложение
                     <p className="portfolio__arrow-icon">↗</p>
                 </Link>
-            </ul>
+            </nav>
         </div>
     );
 }

@@ -7,13 +7,13 @@ function MoviesCardList(props) {
     
     return(
         <div className="list">
-            <div className="list__container">
+            <ul className="list__container">
                 { props.list.map( (movie) => (
-                    <MoviesCard image={movie.image} name={movie.name} time={movie.time} like={movie.like} />
+                    <MoviesCard image={movie.image} name={movie.name} time={movie.time} like={movie.like} key={movie._id} />
                     ))
                 }
-            </div>
-            <button className={`list__button ${location.pathname === '/saved-movies' ? 'list__button_disable' : ''}`}>
+            </ul>
+            <button type="button" className={`list__button ${location.pathname === '/saved-movies' ? 'list__button_disable' : ''}`}>
                     Ещё
             </button>
         </div>

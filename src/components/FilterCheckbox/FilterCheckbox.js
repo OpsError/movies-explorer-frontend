@@ -8,7 +8,7 @@ function FilterCheckbox() {
     }
     return(
         <div className="filter">
-            <button className="filter__checkbox" onClick={clickButton}>
+            <button type="button" className="filter__checkbox" onClick={clickButton}>
                 <span className={`filter__circle ${clickedButton? 'filter__circle_clicked' : ''}`}></span>
             </button>
             <p className="filter__name" onClick={clickButton}>Короткометражки</p>

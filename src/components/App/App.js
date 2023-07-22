@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
@@ -16,7 +16,7 @@ function App() {
   const authorized = false;
 
   return(
-      <div>
+    <BrowserRouter>
         <Header authorized={authorized} />
         
         <Routes>
@@ -29,7 +29,7 @@ function App() {
           <Route path='/404' element={<NotFound />} />
         </Routes>
         <Footer />
-      </div>
+    </BrowserRouter>
   );
 }
 

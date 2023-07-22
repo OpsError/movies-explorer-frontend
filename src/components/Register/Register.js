@@ -6,19 +6,19 @@ function Register() {
             <AuthForm section="register" buttonText="Зарегистрироваться" text="Уже зарегистрированы?" linkText="Войти" path="/signin">
                 <div className="form__element">
                     <label className="form__headline">Имя</label>
-                    <input className="form__input" required type="text" defaultValue="Виталий" />
+                    <input className="form__input" required type="text" defaultValue="Виталий" placeholder="Имя" />
                     <span className="form__error"></span>
                 </div>
 
                 <div className="form__element">
                     <label className="form__headline">E-mail</label>
-                    <input className="form__input" required type="email" defaultValue="pochta@yandex.ru" />
+                    <input className="form__input" required type="email" defaultValue="pochta@yandex.ru" placeholder="Почта" />
                     <span className="form__error"></span>
                 </div>
 
                 <div className="form__element">
                     <label className="form__headline">Пароль</label>
-                    <input className="form__input form__input_error" required type="password" defaultValue="123456789" />
+                    <input className="form__input form__input_error" required type="password" defaultValue="123456789" placeholder="Пароль" />
                     <span className="form__error">Что-то пошло не так...</span>
                 </div>
             </AuthForm>

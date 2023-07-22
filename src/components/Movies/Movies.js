@@ -16,10 +16,10 @@ function Movies() {
         }
     }, [arr.length])
     return(
-        <section className="movies">
+        <main className="movies">
             <SearchForm />
             <MoviesCardList list={arr} />
-        </section>
+        </main>
     );
 }
 
