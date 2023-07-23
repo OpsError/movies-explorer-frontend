@@ -2,7 +2,7 @@ import React from "react";
 
 function Techs() {
     return(
-        <div className="main__techs techs">
+        <section className="main__techs techs">
             <h2 className="techs__header header-section">Технологии</h2>
 
             <div className="techs__content">
@@ -19,7 +19,7 @@ function Techs() {
                     <li className="techs__element">mongoDB</li>
                 </ul>
             </div>
-        </div>
+        </section>
     );
 }
 

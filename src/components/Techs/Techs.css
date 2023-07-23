@@ -92,7 +92,7 @@
     }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 747px) {
     .techs__list {
         margin-top: 50px;
         display: grid;

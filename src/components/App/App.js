@@ -13,7 +13,7 @@ import NotFound from '../NotFound/NotFound';
 
 function App() {
   // поменять навигацию в шапке сайта
-  const authorized = false;
+  const authorized = true;
 
   return(
     <BrowserRouter>

@@ -30,7 +30,7 @@ function Register() {
                 <div className="form__element">
                     <label className="form__headline">Имя</label>
                     <input className={`form__input ${isInvalidName && 'form__input_error'}`} required name="name" type="text" value={formValue.name} placeholder="Имя" onChange={handleChange} />
-                    <span className="form__error">{isInvalidName && 'Минимальная длина имени -- 3 символа'}</span>
+                    <span className="form__error">{isInvalidName && 'Что-то пошло не так...'}</span>
                 </div>
 
                 <div className="form__element">
@@ -42,7 +42,7 @@ function Register() {
                 <div className="form__element">
                     <label className="form__headline">Пароль</label>
                     <input className={`form__input ${isInvalidPassword && 'form__input_error'}`} required name="password" type="password" value={formValue.password} placeholder="Пароль" onChange={handleChange} />
-                    <span className="form__error">{isInvalidPassword && 'Минимальная длина пароля -- 3 символа'}</span>
+                    <span className="form__error">{isInvalidPassword && 'Что-то пошло не так...'}</span>
                 </div>
             </AuthForm>
     );

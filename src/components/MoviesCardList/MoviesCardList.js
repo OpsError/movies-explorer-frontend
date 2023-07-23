@@ -6,7 +6,7 @@ function MoviesCardList(props) {
     const location = useLocation();
     
     return(
-        <div className="list">
+        <section className="list">
             <ul className="list__container">
                 { props.list.map( (movie) => (
                     <MoviesCard image={movie.image} name={movie.name} time={movie.time} like={movie.like} key={movie._id} />
@@ -16,7 +16,7 @@ function MoviesCardList(props) {
             <button type="button" className={`list__button ${location.pathname === '/saved-movies' ? 'list__button_disable' : ''}`}>
                     Ещё
             </button>
-        </div>
+        </section>
     );
 }
 
