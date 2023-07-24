@@ -1,0 +1,67 @@
+.filter {
+    margin-top: 28px;
+    padding-bottom: 55px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #E8E8E8;
+}
+
+@media screen and (max-width: 768px) {
+    .filter {
+        /* padding-bottom: 51px; */
+        padding-bottom: 35px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .filter {
+        padding-bottom: 38px;
+        margin-top: 32px;
+    }
+}
+
+.filter__checkbox {
+    width: 36px;
+    height: 20px;
+    padding: 2px;
+    border: 0;
+    background-color: #EBEBEB;
+    border-radius: 10px;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.filter__circle {
+    position: absolute;
+    top: 2px;
+    width: 14px;
+    height: 14px;
+    background-color: #2BE080;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    transform: translateX(0px);
+    transition: transform .3s, background-color .3s;
+}
+
+.filter__circle_clicked {
+    transform: translateX(-16px);
+    background-color: #F5F5F5;
+}
+
+.filter__name {
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.28;
+}
+
+@media screen and (max-width: 425px) {
+    .filter__name {
+        font-size: 11px;
+        font-weight: 400;
+        line-height: 1.63;
+    }
+}

@@ -1,0 +1,27 @@
+@import url('../../vendor/normalize.css');
+@import url('../../vendor/fonts.css');
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+@import url('../Header/Header.css');
+@import url('../Navigation/Navigation.css');
+@import url('../Main/Main.css');
+@import url('../Promo/Promo.css');
+@import url('../AboutProject/AboutProject.css');
+@import url('../Techs/Techs.css');
+@import url('../AboutMe/AboutMe.css');
+@import url('../Portfolio/Portfolio.css');
+@import url('../Footer/Footer.css');
+@import url('../Register/Register.css');
+@import url('../AuthForm/AuthForm.css');
+@import url('../Profile/Profile.css');
+@import url('../Movies/Movies.css');
+@import url('../SavedMovies/SavedMovies.css');
+@import url('../SearchForm/SearchForm.css');
+@import url('../Preloader/Preloader.css');
+@import url('../MoviesCardList/MoviesCardList.css');
+@import url('../MoviesCard/MoviesCard.css');
+@import url('../FilterCheckbox/FilterCheckbox.css');
+@import url('../NotFound/NotFound.css');
