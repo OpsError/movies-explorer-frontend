@@ -12,7 +12,7 @@ function MoviesCard(props) {
     return(
         <li className="card">
             <div className="card__image-container">
-                <img src={props.image} className="card__image" alt={props.name} />
+                <img src={`https://api.nomoreparties.co/${props.image}`} className="card__image" alt={props.name} />
             </div>
             <div className={`card__container ${location.pathname === '/saved-movies' ? 'card__container_cursor_pointer' : ''}`}>
                 <div className="card__info-container">

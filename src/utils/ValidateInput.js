@@ -1,9 +1,21 @@
-function ValidateInput(value) {
-    if(value.length < 4 || value.length > 31) {
-        return true;
-    } else {
-        return false;
-    }
+import validator from "validator";
+
+const regex = /^[a-zа-яё\s\-]+$/i;
+
+function validateName(name) {
+    return regex.test(name) && validator.isByteLength(name, {min: 3, max: 30});
 }
 
-export default ValidateInput;
+function validateEmail(email) {
+    return validator.isEmail(email);
+}
+
+function validatePassword(password) {
+    return validator.isByteLength(password, { min: 8, max: 30 });
+}
+
+export {
+    validateName,
+    validateEmail,
+    validatePassword
+}

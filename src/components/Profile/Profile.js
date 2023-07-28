@@ -1,27 +1,29 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import FormEdit from "../FormEdit/FormEdit";
-import validateInput from "../../utils/ValidateInput"
+import { validateName } from "../../utils/ValidateInput";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
-function Profile() {
+function Profile(props) {
+    const currentUser = React.useContext(CurrentUserContext);
     const [edit, setEdit] = React.useState(false);
-    const [formName, setFormName] = React.useState('Виталий');
     const [isInvalidData, setIsInvalidData] = React.useState(false);
-    const [formEmail, setFormEmail] = React.useState('pochta@yandex.ru');
+    const [formValue, setFormValue] = React.useState({
+        name: currentUser.name,
+        email: currentUser.email
+    });
 
     function editForm() {
         setEdit(!edit);
     }
 
-    function handleChangeEmail(e) {
-        const value = e.target;
-        setFormEmail(value.value);
-    }
-
     function handleChange(e) {
-        const value = e.target;
-        setFormName(value.value);
-        setIsInvalidData(validateInput(value.value));
+        const { name, value } = e.target;
+        setFormValue({
+            ...formValue,
+            [name]: value
+        })
+        setIsInvalidData( name === 'name'? validateName(value) : false );
     }
     return(
         <main className="profile">
@@ -30,14 +32,14 @@ function Profile() {
                         <FormEdit textButton="Сохранить" classButton={`profile__edit_color_blue ${isInvalidData && 'profile__edit_disabled'}`}>
                             <div className="profile__element">
                                 <label className="profile__label">Имя</label>
-                                <input name="name" type="text" className={`profile__input ${isInvalidData && 'profile__input_error'}`} value={formName} placeholder="Имя" onChange={handleChange} />
+                                <input name="name" type="text" className={`profile__input ${isInvalidData && 'profile__input_error'}`} value={formValue.name} placeholder="Имя" onChange={handleChange} />
                             </div>
 
                             <span className="profile__border" />
 
                             <div className="profile__element">
                                 <label className="profile__label">E-mail</label>
-                                <input name="email" type="email" className="profile__input" value={formEmail} placeholder="Почта" onChange={handleChangeEmail} />
+                                <input name="email" type="email" className="profile__input" value={formValue.email} placeholder="Почта" onChange={handleChange} />
                             </div>
                         </FormEdit>
                      :
@@ -45,14 +47,14 @@ function Profile() {
                     <FormEdit textButton="Редактировать" onClick={editForm}>
                         <div className="profile__element">
                             <label className="profile__label">Имя</label>
-                            <input type="text" className="profile__input profile__input_focus_disable" value={formName} disabled placeholder="Имя" />
+                            <input type="text" className="profile__input profile__input_focus_disable" value={formValue.name} disabled placeholder="Имя" />
                         </div>
 
                         <span className="profile__border" />
 
                         <div className="profile__element">
                             <label className="profile__label">E-mail</label>
-                            <input type="email" className="profile__input profile__input_focus_disable" value={formEmail} disabled placeholder="Почта" />
+                            <input type="email" className="profile__input profile__input_focus_disable" value={formValue.email} disabled placeholder="Почта" />
                         </div>
                     </FormEdit>
                 }
@@ -66,7 +68,7 @@ function Profile() {
                      : 
                     <div className="profile__links">
                         <button type="button" className="profile__edit" onClick={editForm}>Редактировать</button>
-                        <Link to="/" className="profile__signout">Выйти из аккаунта</Link>
+                        <Link to="/" className="profile__signout" onClick={props.signout}>Выйти из аккаунта</Link>
                     </div>
                 }
         </main>

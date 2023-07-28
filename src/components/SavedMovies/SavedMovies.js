@@ -7,7 +7,7 @@ function SavedMovies() {
     return(
         <main className="saved">
             <SearchForm />
-            <MoviesCardList list={savedMovies.slice(0,3)} />
+            <MoviesCardList list={savedMovies.slice(0,3)} buttonDisable={true} />
         </main>
     );
 }

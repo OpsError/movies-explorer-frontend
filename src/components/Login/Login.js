@@ -1,20 +1,46 @@
 import React from "react";
 import AuthForm from "../AuthForm/AuthForm";
 
-function Login() {
+function Login(props) {
+    const [formValue, setFormValue] = React.useState({
+        email: '',
+        password: ''
+    });
+
+    function handleChange(e) {
+        const { name, value } = e.target;
+        setFormValue({
+            ...formValue,
+            [name]: value
+        });
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        props.onSubmit(formValue);
+        setFormValue({
+            email: '',
+            password: ''
+        });
+    }
     return(
-        <AuthForm section="login" buttonText="Войти" text="Ещё не зарегистрированы?" linkText="Регистрация" path="/signup" submitClass="form__submit_margin_top">
+        <AuthForm section="login" buttonText="" text="Ещё не зарегистрированы?" linkText="Регистрация" path="/signup" submitClass="form__submit_margin_top" handleSubmit={handleSubmit}>
             <div className="form__element">
                 <label className="form__headline">E-mail</label>
-                <input className="form__input" required type="email" defaultValue="pochta@yandex.ru" placeholder="Почта" />
+                <input className="form__input" required name="email" type="email" value={formValue.email} onChange={handleChange} placeholder="Почта" />
                 <span className="form__error"></span>
             </div>
 
             <div  className="form__element">
                 <label className="form__headline">Пароль</label>
-                <input className="form__input" required type="password" placeholder="Пароль" />
+                <input className="form__input" required name="password" type="password" value={formValue.password} onChange={handleChange} placeholder="Пароль" />
                 <span className="form__error"></span>
             </div>
+
+            <div className="form__submit-container form__submit-container_margin_top">
+                    <span className="form__error-response"></span>
+                    <button type="submit" className='form__submit'>Войти</button>
+                </div>
         </AuthForm>
     );
 }

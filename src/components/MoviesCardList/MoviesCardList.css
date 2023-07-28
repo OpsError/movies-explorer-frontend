@@ -24,12 +24,6 @@
 
 @media screen and (max-width: 1160px) {
     .list__container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media screen and (max-width: 790px) {
-    .list__container {
         grid-template-columns: repeat(2, 339px);
         row-gap: 30px;
         column-gap: 30px;
@@ -37,12 +31,6 @@
 }
 
 @media screen and (max-width: 720px) {
-    .list__container {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media screen and (max-width: 425px) {
     .list__container {
         grid-template-columns: 300px;
         row-gap: 13px;
