@@ -1,9 +1,9 @@
 import validator from "validator";
 
-const regex = /^[a-zа-яё\s\-]+$/i;
+const regex = /^[a-zа-яё\s/-]+$/i;
 
 function validateName(name) {
-    return regex.test(name) && validator.isByteLength(name, {min: 3, max: 30});
+    return regex.test(name) && validator.isByteLength(name, {min: 3, max: 59});
 }
 
 function validateEmail(email) {

@@ -50,9 +50,9 @@
     }
 }
 
-.card__container_cursor_pointer {
+/* .card__container_cursor_pointer {
     cursor: pointer;
-}
+} */
 
 .card__container:hover {
     .card__delete {
@@ -91,7 +91,7 @@
     border: 0;
     width: 30px;
     height: 30px;
-    transition: background-image .3s;
+    transition: background-image .3s, opacity .3s;
 }
 
 .card__like_active {

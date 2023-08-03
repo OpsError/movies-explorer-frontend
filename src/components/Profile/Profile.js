@@ -1,78 +1,102 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 import FormEdit from "../FormEdit/FormEdit";
-import { validateName } from "../../utils/ValidateInput";
-import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import { validateName, validateEmail } from "../../utils/ValidateInput";
 
 function Profile(props) {
-    const currentUser = React.useContext(CurrentUserContext);
-    const [edit, setEdit] = React.useState(false);
-    const [isInvalidData, setIsInvalidData] = React.useState(false);
-    const [formValue, setFormValue] = React.useState({
-        name: currentUser.name,
-        email: currentUser.email
+  const [isInvalidData, setIsInvalidData] = React.useState(true);
+  const [formValue, setFormValue] = React.useState({
+    name: props.currentUser.name,
+    email: props.currentUser.email,
+  });
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    props.onSubmit({
+        name: formValue.name,
+        email: formValue.email
+    });
+  }
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setFormValue({
+      ...formValue,
+      [name]: value,
     });
 
-    function editForm() {
-        setEdit(!edit);
+    let isValidName = false;
+    let isValidEmail = false;
+    if (name === 'name') {
+        isValidName = validateName(value); 
+    } else {
+        isValidEmail = validateEmail(value);
     }
 
-    function handleChange(e) {
-        const { name, value } = e.target;
-        setFormValue({
-            ...formValue,
-            [name]: value
-        })
-        setIsInvalidData( name === 'name'? validateName(value) : false );
-    }
-    return(
-        <main className="profile">
-                {
-                    edit ?
-                        <FormEdit textButton="Сохранить" classButton={`profile__edit_color_blue ${isInvalidData && 'profile__edit_disabled'}`}>
-                            <div className="profile__element">
-                                <label className="profile__label">Имя</label>
-                                <input name="name" type="text" className={`profile__input ${isInvalidData && 'profile__input_error'}`} value={formValue.name} placeholder="Имя" onChange={handleChange} />
-                            </div>
+    setIsInvalidData( isValidName || isValidEmail  );
+    
+  }
+  return (
+    <Routes>
+      <Route path="/edit" element={
+          <main className="profile">
+            <FormEdit textButton="Сохранить" onSubmit={handleSubmit}>
+              <div className={`profile__element ${!isInvalidData ? 'profile__element_error' : ''}`}>
+                <label className="profile__label">Имя</label>
+                <input name="name" type="text" className={`profile__input ${ !isInvalidData && "profile__input_error" }`} value={formValue.name} placeholder="Имя" onChange={handleChange} />
+              </div>
 
-                            <span className="profile__border" />
+              <span className="profile__border" />
 
-                            <div className="profile__element">
-                                <label className="profile__label">E-mail</label>
-                                <input name="email" type="email" className="profile__input" value={formValue.email} placeholder="Почта" onChange={handleChange} />
-                            </div>
-                        </FormEdit>
-                     :
+              <div className="profile__element">
+                <label className="profile__label">E-mail</label>
+                <input name="email" type="email" className="profile__input" value={formValue.email} placeholder="Почта" onChange={handleChange} />
+              </div>
 
-                    <FormEdit textButton="Редактировать" onClick={editForm}>
-                        <div className="profile__element">
-                            <label className="profile__label">Имя</label>
-                            <input type="text" className="profile__input profile__input_focus_disable" value={formValue.name} disabled placeholder="Имя" />
-                        </div>
+              <div className="profile__links">
+                <span className="profile__error">
+                    {props.errorText}
+                </span>
+                <button type="submit" onSubmit={handleSubmit} disabled={!isInvalidData} className={`profile__edit profile__edit_color_blue ${ !isInvalidData && "profile__edit_disabled" }`}>
+                    Сохранить
+                </button>
+              </div>
+            </FormEdit>
+          </main>
+        }>
+      </Route>
 
-                        <span className="profile__border" />
+      <Route path="/" element={
+          <main className="profile">
+            <FormEdit textButton="Редактировать">
+              <div className="profile__element">
+                <label className="profile__label">Имя</label>
+                <input type="text" className="profile__input profile__input_focus_disable" value={props.currentUser.name} disabled placeholder="Имя" />
+              </div>
 
-                        <div className="profile__element">
-                            <label className="profile__label">E-mail</label>
-                            <input type="email" className="profile__input profile__input_focus_disable" value={formValue.email} disabled placeholder="Почта" />
-                        </div>
-                    </FormEdit>
-                }
-                {
-                    edit?
-                    <div className="profile__links">
-                        <span className="profile__error">При обновлении профиля произошла ошибка.</span>
-                        {/* profile__edit_disabled -- класс для недействующей кнопки */}
-                        <button type="submit" disabled={isInvalidData} className={`profile__edit profile__edit_color_blue ${isInvalidData && 'profile__edit_disabled'}`} onClick={editForm}>Сохранить</button>
-                    </div> 
-                     : 
-                    <div className="profile__links">
-                        <button type="button" className="profile__edit" onClick={editForm}>Редактировать</button>
-                        <Link to="/" className="profile__signout" onClick={props.signout}>Выйти из аккаунта</Link>
-                    </div>
-                }
-        </main>
-    );
+              <span className="profile__border" />
+
+              <div className="profile__element">
+                <label className="profile__label">E-mail</label>
+                <input type="email" className="profile__input profile__input_focus_disable" value={props.currentUser.email} disabled placeholder="Почта" />
+              </div>
+            </FormEdit>
+            <div className="profile__links">
+                <Link to="/profile/edit">
+                    <button type="button" className="profile__edit">
+                        Редактировать
+                    </button>
+                </Link>
+              
+              <Link to="/" className="profile__signout" onClick={props.signout}>
+                Выйти из аккаунта
+              </Link>
+            </div>
+          </main>
+        }>
+      </Route>
+    </Routes>
+  );
 }
 
 export default Profile;

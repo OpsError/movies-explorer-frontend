@@ -1,17 +1,12 @@
 import React from "react";
 
-function FilterCheckbox() {
-    const [clickedButton, setClickedButton] = React.useState(false);
-
-    function clickButton() {
-        setClickedButton(!clickedButton);
-    }
+function FilterCheckbox(props) {
     return(
         <div className="filter">
-            <button type="button" className="filter__checkbox" onClick={clickButton}>
-                <span className={`filter__circle ${clickedButton? 'filter__circle_clicked' : ''}`}></span>
+            <button type="button" className="filter__checkbox" onClick={props.handleClick}>
+                <span className={`filter__circle ${props.isSearchDuration === true? 'filter__circle_clicked' : ''}`}></span>
             </button>
-            <p className="filter__name" onClick={clickButton}>Короткометражки</p>
+            <p className="filter__name" onClick={props.handleClick}>Короткометражки</p>
         </div>
     );
 }

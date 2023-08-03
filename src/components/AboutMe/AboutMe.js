@@ -18,9 +18,6 @@ function AboutMe() {
                     Недавно начал кодить. С 2015 года работал в компании «СКБ Контур». 
                     После того, как прошёл курс по веб-разработке, начал заниматься 
                     фриланс-заказами и ушёл с постоянной работы.</p>
-                    {/* <Link to="https://github.com/OpsError" target="_blank" className="about-me__github">
-                        <p>Github</p>
-                    </Link> */}
                     <p className="about-me__link">
                         <Link to="https://github.com/OpsError" target="_blank" className="about-me__github">Github</Link>
                     </p>

@@ -1,5 +1,6 @@
 import React from "react";
 import AuthForm from "../AuthForm/AuthForm";
+import { validateEmail } from "../../utils/ValidateInput";
 
 function Login(props) {
     const [formValue, setFormValue] = React.useState({
@@ -7,12 +8,17 @@ function Login(props) {
         password: ''
     });
 
+    const [isValidEmail, setIsValidEmail] = React.useState(true);
+
     function handleChange(e) {
         const { name, value } = e.target;
         setFormValue({
             ...formValue,
             [name]: value
         });
+        if (name === 'email') {
+            setIsValidEmail(validateEmail(value));
+        }
     }
 
     function handleSubmit(e) {
@@ -28,18 +34,17 @@ function Login(props) {
             <div className="form__element">
                 <label className="form__headline">E-mail</label>
                 <input className="form__input" required name="email" type="email" value={formValue.email} onChange={handleChange} placeholder="Почта" />
-                <span className="form__error"></span>
+                <span className="form__error">{!isValidEmail && 'Что-то пошло не так...'}</span>
             </div>
 
             <div  className="form__element">
                 <label className="form__headline">Пароль</label>
                 <input className="form__input" required name="password" type="password" value={formValue.password} onChange={handleChange} placeholder="Пароль" />
-                <span className="form__error"></span>
             </div>
 
             <div className="form__submit-container form__submit-container_margin_top">
-                    <span className="form__error-response"></span>
-                    <button type="submit" className='form__submit'>Войти</button>
+                    <span className="form__error-response">{props.errorText}</span>
+                    <button type="submit" disabled={!isValidEmail} className='form__submit'>Войти</button>
                 </div>
         </AuthForm>
     );

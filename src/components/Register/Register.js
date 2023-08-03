@@ -1,7 +1,5 @@
 import React from "react";
 import AuthForm from "../AuthForm/AuthForm";
-// import validateInput from '../../utils/ValidateInput';
-// import validator from "validator";
 import { validateName, validateEmail, validatePassword } from "../../utils/ValidateInput";
 
 function Register(props) {

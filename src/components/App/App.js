@@ -24,15 +24,17 @@ function App() {
   });
   const [movies, setMovies] = React.useState([]);
   const [errorText, setErrorText] = React.useState('');
+  const [savedFilmsList, setSavedFilmsList] =React.useState([]);
+  const [isEmptySavedFilms, setIsEmptySavedFilms] = React.useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
 
+  // регистрация
   function handleSubmitRegisterForm({ name, email, password }) {
     mainApi.signup({ name, email, password })
     .then((res) => {
-      navigate('/movies', {replace: true});
-      localStorage.setItem('token', res.data);
+      handleSubmitLoginForm({ email, password });
       setIsLoggedIn(true);
     })
     .catch((err) => {
@@ -44,28 +46,32 @@ function App() {
     })
   }
 
+  // авторизация
   function handleSubmitLoginForm({ email, password }) {
     mainApi.signin({ email, password })
     .then((res) => {
       if (res) {
         localStorage.setItem('token', res.token);
+        handleCheckToken();
         setIsLoggedIn(true);
         navigate('/movies', { replace: true });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       if (err.status === 401) {
         setErrorText('Вы ввели неправильный логин или пароль.');
+      } else {
+        setErrorText('Что-то пошло не так...')
       }
     })
   }
 
+  // проверка токена и получение информации о пользователе
   function handleCheckToken() {
     const token = localStorage.getItem('token');
     if (token) {
-      mainApi.checkToken(token)
+      mainApi.getInfo()
       .then((res) => {
-        console.log(res);
         if (res) {
           setIsLoggedIn(true);
           setCurrentUser({
@@ -88,13 +94,37 @@ function App() {
     handleCheckToken();
   }, []);
 
+  // выход из аккаунта
   function signOut() {
     setCurrentUser({});
     setIsLoggedIn(false);
     localStorage.removeItem('token');
+    localStorage.removeItem('filmName');
+    localStorage.removeItem('filmDuration');
+    localStorage.removeItem('film');
   }
 
+  // обновить профиль
+  function patchProfile({ name, email }) {
+    mainApi.patchInfo({ name, email })
+    .then((res) => {
+      setCurrentUser({
+        name: res.name,
+        email: res.email
+      });
+      navigate('/profile', { replace: true });
+    })
+    .catch(err => {
+      if (err.status === 500) {
+        setErrorText('При обновлении профиля произошла ошибка.');
+      } else {
+        setErrorText('Пользователь с таким email уже существует.');
+      }
+      console.log(err);
+    }) 
+  }
 
+  // получение фильмов
   React.useEffect(() => {
     if (isLoggedIn) {
       moviesApi.getMovies()
@@ -103,9 +133,55 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+      });
+
+      mainApi.getMovies()
+      .then((res) => {
+        setSavedFilmsList(res.reverse());
       })
+      .catch(() => setIsEmptySavedFilms(true));
     }
   }, [isLoggedIn]);
+
+  // сохранить в избранные
+  function handleLike({ 
+    country, director, duration, year, description, image, trailerLink, thumbnail,
+    movieId, nameRU, nameEN
+   }) {
+    mainApi.postMovies({
+      country, director, duration,year, description, image, trailerLink, thumbnail,
+      movieId, nameRU, nameEN
+    })
+    .then(async(res) => {
+      await setSavedFilmsList([
+        {
+          country: res.country,
+          director: res.director,
+          duration: res.duration,
+          year: res.year,
+          description: res.description,
+          image: res.image,
+          trailerLink: res.trailerLink,
+          thumbnail: res.thumbnail,
+          movieId: res.movieId,
+          _id: res._id,
+          nameRU: res.nameRU,
+          nameEN: res.nameEN
+        },
+        ...savedFilmsList
+      ]);
+    })
+    .catch(err => console.log(err));
+   }
+
+  //  удалить из избранных
+    function handleDeleteLike(movieId) {
+      mainApi.deleteMovies(movieId)
+      .then(() => {
+        setSavedFilmsList(savedFilmsList.filter(item => item._id !== movieId));
+      })
+      .catch((err) => console.log(err));
+   }
 
   return(
     <CurrentUserContext.Provider value={currentUser}>
@@ -114,10 +190,10 @@ function App() {
         <Routes>
           <Route path='/' element={<Main />} />
           <Route path='/signup' element={<Register onSubmit={handleSubmitRegisterForm} errorText={errorText} />} />
-          <Route path='/signin' element={<Login onSubmit={handleSubmitLoginForm} />} />
-          <Route path='/profile' element={<ProtectedRouteElement element={Profile} loggedIn={isLoggedIn} signout={signOut} />} />
-          <Route path='/movies' element={<ProtectedRouteElement element={Movies} loggedIn={isLoggedIn} movies={movies} />} />
-          <Route path='/saved-movies' element={<ProtectedRouteElement element={SavedMovies} loggedIn={isLoggedIn} />} />
+          <Route path='/signin' element={<Login onSubmit={handleSubmitLoginForm} errorText={errorText} />} />
+          <Route path='/profile/*' element={<ProtectedRouteElement element={Profile} loggedIn={isLoggedIn} signout={signOut} onSubmit={patchProfile} errorText={errorText} currentUser={currentUser} />} />
+          <Route path='/movies' element={<ProtectedRouteElement element={Movies} loggedIn={isLoggedIn} movies={movies} handleLike={handleLike} savedMovies={savedFilmsList} />} />
+          <Route path='/saved-movies' element={<ProtectedRouteElement element={SavedMovies} loggedIn={isLoggedIn} savedMovies={savedFilmsList} handleDelete={handleDeleteLike} isEmpty={isEmptySavedFilms} />} />
           <Route path='/404' element={<NotFound />} />
         </Routes>
         <Footer />
