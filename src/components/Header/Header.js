@@ -11,9 +11,10 @@ function Header(props) {
 
     const containerProfile = location.pathname === '/profile' ? "header__container_profile" : "";
     const headerMain = location.pathname === '/' ? "header_background_purple" : "";
+    const isAllowedRoute = ['/signup', '/signin', '/', '/movies', '/saved-movies', '/profile', '/profile/edit'].includes(location.pathname);
 
     return(
-         location.pathname !== '/404' && <header className={ `header ${headerMain} ${headerAuth}` } >
+         isAllowedRoute && <header className={ `header ${headerMain} ${headerAuth}` } >
             <div className={ `header__container ${containerAuth} ${containerProfile}` }>
                 <Link to="/">
                     <img src={logo} alt="Логотип" className="header__logo" />

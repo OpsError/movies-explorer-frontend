@@ -6,24 +6,33 @@ function MoviesCard(props) {
     const location = useLocation();
 
     function saveMovie() {
-        setIsLiked(true);
-        props.onClick({
-            country: props.country,
-            director: props.director,
-            duration: props.duration,
-            year: props.year,
-            description: props.description,
-            image: `https://api.nomoreparties.co/${props.image}`,
-            trailerLink: props.trailerLink,
-            thumbnail: `https://api.nomoreparties.co/${props.thumbnail}`,
-            movieId: props.movieId,
-            nameRU: props.nameRU,
-            nameEN: props.nameEN
-        });
+        if (isLiked) {
+            setIsLiked(
+                props.onDelete(props._id)
+            );
+        } else {
+            setIsLiked(
+                props.onClick({
+                    country: props.country,
+                    director: props.director,
+                    duration: props.duration,
+                    year: props.year,
+                    description: props.description,
+                    image: `https://api.nomoreparties.co/${props.image}`,
+                    trailerLink: props.trailerLink,
+                    thumbnail: `https://api.nomoreparties.co/${props.thumbnail}`,
+                    movieId: props.movieId,
+                    nameRU: props.nameRU,
+                    nameEN: props.nameEN
+                })
+            );
+        }
     }
 
     function deleteMovie() {
-        props.onDelete(props._id);
+        setIsLiked(
+            props.onDelete(props._id)
+        );
     }
     return(
         <li className="card">

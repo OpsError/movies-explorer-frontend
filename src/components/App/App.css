@@ -25,3 +25,4 @@ body {
 @import url('../MoviesCard/MoviesCard.css');
 @import url('../FilterCheckbox/FilterCheckbox.css');
 @import url('../NotFound/NotFound.css');
+@import url('../SuccessPopup/SuccessPopup.css');

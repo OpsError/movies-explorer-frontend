@@ -2,13 +2,17 @@ import React from "react";
 import { Link, Route, Routes } from "react-router-dom";
 import FormEdit from "../FormEdit/FormEdit";
 import { validateName, validateEmail } from "../../utils/ValidateInput";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 function Profile(props) {
+  const currentUser = React.useContext(CurrentUserContext);
   const [isInvalidData, setIsInvalidData] = React.useState(true);
   const [formValue, setFormValue] = React.useState({
-    name: props.currentUser.name,
-    email: props.currentUser.email,
+    name: currentUser.name,
+    email: currentUser.email,
   });
+  const [isButtonDisable, setIsButtonDisable] = React.useState(false);
+  const [isSameInputs, setIsSameInputs] = React.useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -16,6 +20,7 @@ function Profile(props) {
         name: formValue.name,
         email: formValue.email
     });
+    setIsButtonDisable(true);
   }
 
   function handleChange(e) {
@@ -28,14 +33,21 @@ function Profile(props) {
     let isValidName = false;
     let isValidEmail = false;
     if (name === 'name') {
-        isValidName = validateName(value); 
+        isValidName = validateName(value);
     } else {
         isValidEmail = validateEmail(value);
     }
 
-    setIsInvalidData( isValidName || isValidEmail  );
-    
+    setIsInvalidData( isValidName || isValidEmail );
   }
+
+  React.useEffect(() => {
+    if (formValue.name === currentUser.name && formValue.email === currentUser.email) {
+      setIsSameInputs(true);
+    } else {
+      setIsSameInputs(false);
+    }
+  }, [formValue], [currentUser]);
   return (
     <Routes>
       <Route path="/edit" element={
@@ -57,7 +69,7 @@ function Profile(props) {
                 <span className="profile__error">
                     {props.errorText}
                 </span>
-                <button type="submit" onSubmit={handleSubmit} disabled={!isInvalidData} className={`profile__edit profile__edit_color_blue ${ !isInvalidData && "profile__edit_disabled" }`}>
+                <button type="submit" onSubmit={handleSubmit} disabled={!isInvalidData || props.isDisableButton || isButtonDisable || isSameInputs} className={`profile__edit profile__edit_color_blue ${ (!isInvalidData || isButtonDisable) && "profile__edit_disabled" }`}>
                     Сохранить
                 </button>
               </div>

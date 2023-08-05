@@ -15,8 +15,9 @@ function SavedMovies(props) {
         setFormValue(value);
     }
 
-    function handleClick() {
-        setIsShortDuration(!isShortDuration);
+    async function handleClick() {
+        await setIsShortDuration(!isShortDuration);
+        handleSubmit();
     }
 
     function handleSubmit() {
@@ -26,16 +27,14 @@ function SavedMovies(props) {
             setIsPreloaderEnable(false);
         }, 2000);
         const film = props.savedMovies.filter((film) => filterFilms(film, formValue, isShortDuration, false));
+        console.log(isShortDuration)
         setSearchFilms(film);
+        setIsSavedMovieList(false);
     }
 
     React.useEffect(() => {
         if (!formValue) {
-            setIsSavedMovieList(true)
-        } else if (formValue) {
-            setSearchFilms([]);
-            setIsSavedMovieList(false);
-            setIsPreloaderEnable(false);
+            setIsSavedMovieList(true);
         }
     }, [formValue])
 

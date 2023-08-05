@@ -1,0 +1,9 @@
+const LAPTOP_WIDTH = 1160;
+const TABLET_WIDTH = 1159;
+const MOBILE_WIDTH = 425;
+
+export {
+    LAPTOP_WIDTH,
+    TABLET_WIDTH,
+    MOBILE_WIDTH
+}

@@ -16,12 +16,12 @@ function SearchForm(props) {
         <section className="search">
             <form className="search__form" onSubmit={handleSubmit}>
                 <div className="search__container">
-                    <input className="search__input" required placeholder="Фильм" value={props.formValue} type="text" onChange={handleChange} />
+                    <input className="search__input" required placeholder="Фильм" value={props.input} type="text" onChange={handleChange} />
                     <button type="submit" className="search__icon-conteiner">
                         <img src={searchIcon} alt="Иконка поиска" />
                     </button>
                 </div>
-                <FilterCheckbox handleClick={props.handleClick} isSearchDuration={props.isSearchDuration} />
+                <FilterCheckbox handleClick={props.handleClick} isClicked={props.isClicked} />
             </form>
         </section>
     );

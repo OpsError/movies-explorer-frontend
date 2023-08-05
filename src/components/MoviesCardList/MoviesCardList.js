@@ -1,6 +1,8 @@
 import React from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import { useLocation } from "react-router-dom";
+import { LAPTOP_WIDTH, TABLET_WIDTH, MOBILE_WIDTH } from "../../utils/WidthScreen";
+import { LAPTOP_COUNT, TABLET_COUNT, MOBILE_COUNT } from "../../utils/CountArray";
  
 function MoviesCardList(props) {
     const location = useLocation();
@@ -11,26 +13,26 @@ function MoviesCardList(props) {
 
     function handleClickButton() {
         if (location.pathname === '/movies') {
-            if (window.innerWidth > 1160) {
-                if (movieList.length > (arr.length + 12)) {
+            if (window.innerWidth > LAPTOP_WIDTH) {
+                if (movieList.length > (arr.length + LAPTOP_COUNT)) {
                     setIsButtonDisable(false);
-                    setArr(movieList.slice(0, arr.length + 12));
+                    setArr(movieList.slice(0, arr.length + LAPTOP_COUNT));
                 } else {
                     setIsButtonDisable(true);
                     setArr(movieList.slice(0, props.movies.length));
                 }
-            } else if (window.innerWidth > 425  && window.innerWidth <= 1159) {
-                if (props.movies.length > (arr.length + 8)) {
+            } else if (window.innerWidth > MOBILE_WIDTH  && window.innerWidth <= TABLET_WIDTH) {
+                if (props.movies.length > (arr.length + TABLET_COUNT)) {
                     setIsButtonDisable(false);
-                    setArr(movieList.slice(0, arr.length + 8));
+                    setArr(movieList.slice(0, arr.length + TABLET_COUNT));
                 } else {
                     setIsButtonDisable(true);
                     setArr(movieList.slice(0, props.movies.length));
                 }
-            } else if (window.innerWidth <= 425) {
-                if (props.movies.length > (arr.length + 5)) {
+            } else if (window.innerWidth <= MOBILE_WIDTH) {
+                if (props.movies.length > (arr.length + MOBILE_COUNT)) {
                     setIsButtonDisable(false);
-                    setArr(movieList.slice(0, arr.length + 5));
+                    setArr(movieList.slice(0, arr.length + MOBILE_COUNT));
                 } else {
                     setIsButtonDisable(true);
                     setArr(movieList.slice(0, props.movies.length));
@@ -41,28 +43,28 @@ function MoviesCardList(props) {
     }
 
     React.useEffect(() => {
-        if (window.innerWidth > 1160) {
-             if (movieList.length > 12) {
-                setArr(movieList.slice(0, 12));
+        if (window.innerWidth > LAPTOP_WIDTH) {
+             if (movieList.length > LAPTOP_COUNT) {
+                setArr(movieList.slice(0, LAPTOP_COUNT));
                 setIsButtonDisable(false);
-             } else if (movieList.length <= 12) {
-                setArr(movieList.slice(0, 12));
+             } else if (movieList.length <= LAPTOP_COUNT) {
+                setArr(movieList.slice(0, LAPTOP_COUNT));
                 setIsButtonDisable(true);
              }
-        } else if (window.innerWidth > 425 && window.innerWidth <= 1159) {
-            if (movieList.length > 8) {
-                setArr(movieList.slice(0, 8));
+        } else if (window.innerWidth > MOBILE_WIDTH && window.innerWidth <= TABLET_WIDTH) {
+            if (movieList.length > TABLET_COUNT) {
+                setArr(movieList.slice(0, TABLET_COUNT));
                 setIsButtonDisable(false);
-             } else if (movieList.length <= 8) {
-                setArr(movieList.slice(0, 8));
+             } else if (movieList.length <= TABLET_COUNT) {
+                setArr(movieList.slice(0, TABLET_COUNT));
                 setIsButtonDisable(true);
              }
-        } else if (window.innerWidth <= 425 && props.movies.length > 5) {
-            if (movieList.length > 5) {
-                setArr(movieList.slice(0, 5));
+        } else if (window.innerWidth <= MOBILE_WIDTH && props.movies.length > 5) {
+            if (movieList.length > MOBILE_COUNT) {
+                setArr(movieList.slice(0, MOBILE_COUNT));
                 setIsButtonDisable(false);
-             } else if (movieList.length <= 5) {
-                setArr(movieList.slice(0, 5));
+             } else if (movieList.length <= MOBILE_COUNT) {
+                setArr(movieList.slice(0, MOBILE_COUNT));
                 setIsButtonDisable(true);
              }
         }

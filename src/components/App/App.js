@@ -12,8 +12,10 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 import NotFound from '../NotFound/NotFound';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import ProtectedRouteElement from '../ProtectedRoute/ProtectedRoute';
+import AuthRouteElement from '../AuthRoute/AuthRoute';
 import moviesApi from '../../utils/MoviesApi';
 import mainApi from '../../utils/MainApi';
+import SuccessPopup from '../SuccessPopup/SuccessPopup';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
@@ -26,6 +28,8 @@ function App() {
   const [errorText, setErrorText] = React.useState('');
   const [savedFilmsList, setSavedFilmsList] =React.useState([]);
   const [isEmptySavedFilms, setIsEmptySavedFilms] = React.useState(false);
+  const [isDisableButton, setIsDIsableButton] = React.useState(false);
+  const [isOpenPopup, setIsOpenPopup] = React.useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -106,13 +110,15 @@ function App() {
 
   // обновить профиль
   function patchProfile({ name, email }) {
+    setIsDIsableButton(true);
     mainApi.patchInfo({ name, email })
-    .then((res) => {
-      setCurrentUser({
+    .then(async (res) => {
+      await setCurrentUser({
         name: res.name,
         email: res.email
       });
       navigate('/profile', { replace: true });
+      setIsOpenPopup(true);
     })
     .catch(err => {
       if (err.status === 500) {
@@ -121,7 +127,8 @@ function App() {
         setErrorText('Пользователь с таким email уже существует.');
       }
       console.log(err);
-    }) 
+    });
+    setIsDIsableButton(false);
   }
 
   // получение фильмов
@@ -144,7 +151,7 @@ function App() {
   }, [isLoggedIn]);
 
   // сохранить в избранные
-  function handleLike({ 
+  function createMovie({ 
     country, director, duration, year, description, image, trailerLink, thumbnail,
     movieId, nameRU, nameEN
    }) {
@@ -172,6 +179,7 @@ function App() {
       ]);
     })
     .catch(err => console.log(err));
+    return true;
    }
 
   //  удалить из избранных
@@ -181,20 +189,52 @@ function App() {
         setSavedFilmsList(savedFilmsList.filter(item => item._id !== movieId));
       })
       .catch((err) => console.log(err));
+      return false;
    }
+
+   function handleOpenTooltip() {
+    setIsOpenPopup(true);
+}
+
+// закрытие попапов
+function closeAllPopups() {
+    setIsOpenPopup(false);
+}
+
+function closePopupButton(evt) {
+    if (evt.target.classList.contains('popup') || (evt.target.classList.contains('popup__close-icon')) || (evt.key === 'Escape')) {
+        closeAllPopups();
+    }
+}
+
+React.useEffect(() => {
+    function closeByEscape(evt) {
+        if (evt.key === 'Escape') {
+            closeAllPopups();
+        }
+    }
+    if (isOpenPopup) {
+        document.addEventListener('keydown', closeByEscape);
+        return () => {
+            document.removeEventListener('keydown', closeByEscape);
+        }
+    }
+}, [isOpenPopup]);
 
   return(
     <CurrentUserContext.Provider value={currentUser}>
         <Header authorized={isLoggedIn} />
-        
+        <SuccessPopup isOpen={isOpenPopup} onClose={closePopupButton} />
         <Routes>
+          <Route path='/*' element={<NotFound />} />
           <Route path='/' element={<Main />} />
-          <Route path='/signup' element={<Register onSubmit={handleSubmitRegisterForm} errorText={errorText} />} />
-          <Route path='/signin' element={<Login onSubmit={handleSubmitLoginForm} errorText={errorText} />} />
-          <Route path='/profile/*' element={<ProtectedRouteElement element={Profile} loggedIn={isLoggedIn} signout={signOut} onSubmit={patchProfile} errorText={errorText} currentUser={currentUser} />} />
-          <Route path='/movies' element={<ProtectedRouteElement element={Movies} loggedIn={isLoggedIn} movies={movies} handleLike={handleLike} savedMovies={savedFilmsList} />} />
+          <Route path='/profile/*' element={<ProtectedRouteElement element={Profile} loggedIn={isLoggedIn} signout={signOut} onSubmit={patchProfile} errorText={errorText} currentUser={currentUser} isDisableButton={isDisableButton} />} />
+          <Route path='/movies' element={<ProtectedRouteElement element={Movies} loggedIn={isLoggedIn} movies={movies}  savedMovies={savedFilmsList} />} />
           <Route path='/saved-movies' element={<ProtectedRouteElement element={SavedMovies} loggedIn={isLoggedIn} savedMovies={savedFilmsList} handleDelete={handleDeleteLike} isEmpty={isEmptySavedFilms} />} />
-          <Route path='/404' element={<NotFound />} />
+          <Route path='/signup' element={ <AuthRouteElement element={Register} loggedIn={isLoggedIn} onSubmit={handleSubmitRegisterForm} errorText={errorText} /> } />
+          {/* <Route path='/signup' element={<Register onSubmit={handleSubmitRegisterForm} errorText={errorText} />} /> */}
+          <Route path='/signin' element={ <AuthRouteElement element={Login} loggedIn={isLoggedIn} onSubmit={handleSubmitLoginForm} errorText={errorText} /> } />
+          {/* <Route path='/signin' element={<Login onSubmit={handleSubmitLoginForm} errorText={errorText} />} /> */}
         </Routes>
         <Footer />
     </CurrentUserContext.Provider>
