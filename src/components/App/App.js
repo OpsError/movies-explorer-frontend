@@ -7,6 +7,7 @@ import Footer from '../Footer/Footer';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
+import ProfileEdit from '../ProfileEdit/ProfileEdit';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import NotFound from '../NotFound/NotFound';
@@ -29,7 +30,10 @@ function App() {
   const [savedFilmsList, setSavedFilmsList] =React.useState([]);
   const [isEmptySavedFilms, setIsEmptySavedFilms] = React.useState(false);
   const [isDisableButton, setIsDIsableButton] = React.useState(false);
-  const [isOpenPopup, setIsOpenPopup] = React.useState(false);
+  const [isOpenPopup, setIsOpenPopup] = React.useState({
+    isOpen: false,
+    text: ''
+  });
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -102,10 +106,7 @@ function App() {
   function signOut() {
     setCurrentUser({});
     setIsLoggedIn(false);
-    localStorage.removeItem('token');
-    localStorage.removeItem('filmName');
-    localStorage.removeItem('filmDuration');
-    localStorage.removeItem('film');
+    localStorage.clear();
   }
 
   // обновить профиль
@@ -118,7 +119,10 @@ function App() {
         email: res.email
       });
       navigate('/profile', { replace: true });
-      setIsOpenPopup(true);
+      setIsOpenPopup({
+        isOpen: true,
+        text: "Данные успешно обновлены"
+      });
     })
     .catch(err => {
       if (err.status === 500) {
@@ -126,9 +130,16 @@ function App() {
       } else {
         setErrorText('Пользователь с таким email уже существует.');
       }
-      console.log(err);
     });
     setIsDIsableButton(false);
+  }
+
+  function getSavedMovies() {
+    mainApi.getMovies()
+      .then((res) => {
+        setSavedFilmsList(res.reverse());
+      })
+      .catch(() => setIsEmptySavedFilms(true));
   }
 
   // получение фильмов
@@ -137,16 +148,14 @@ function App() {
       moviesApi.getMovies()
       .then((res) => {
         setMovies(res);
+        localStorage.setItem('allMovies', JSON.stringify(res));
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(() => setIsOpenPopup({
+        isOpen: true,
+        text: "Что-то пошло не так"
+      }));
 
-      mainApi.getMovies()
-      .then((res) => {
-        setSavedFilmsList(res.reverse());
-      })
-      .catch(() => setIsEmptySavedFilms(true));
+      getSavedMovies();
     }
   }, [isLoggedIn]);
 
@@ -178,23 +187,25 @@ function App() {
         ...savedFilmsList
       ]);
     })
-    .catch(err => console.log(err));
+    .catch(() => setIsOpenPopup({
+      isOpen: true,
+      text: "Произошла ошибка, попробуйте позже"
+    }));
     return true;
    }
 
   //  удалить из избранных
     function handleDeleteLike(movieId) {
       mainApi.deleteMovies(movieId)
-      .then(() => {
-        setSavedFilmsList(savedFilmsList.filter(item => item._id !== movieId));
+      .then(async() => {
+        await setSavedFilmsList(savedFilmsList.filter(item => item._id !== movieId));
       })
-      .catch((err) => console.log(err));
+      .catch(() => setIsOpenPopup({
+        isOpen: true,
+        text: "Произошла ошибка, попробуйте позже"
+      }));
       return false;
    }
-
-   function handleOpenTooltip() {
-    setIsOpenPopup(true);
-}
 
 // закрытие попапов
 function closeAllPopups() {
@@ -228,13 +239,11 @@ React.useEffect(() => {
         <Routes>
           <Route path='/*' element={<NotFound />} />
           <Route path='/' element={<Main />} />
-          <Route path='/profile/*' element={<ProtectedRouteElement element={Profile} loggedIn={isLoggedIn} signout={signOut} onSubmit={patchProfile} errorText={errorText} currentUser={currentUser} isDisableButton={isDisableButton} />} />
-          <Route path='/movies' element={<ProtectedRouteElement element={Movies} loggedIn={isLoggedIn} movies={movies}  savedMovies={savedFilmsList} />} />
-          <Route path='/saved-movies' element={<ProtectedRouteElement element={SavedMovies} loggedIn={isLoggedIn} savedMovies={savedFilmsList} handleDelete={handleDeleteLike} isEmpty={isEmptySavedFilms} />} />
+          <Route path='/profile/*' element={<ProtectedRouteElement element={Profile} loggedIn={isLoggedIn} signout={signOut} onSubmit={patchProfile} errorText={errorText} isDisableButton={isDisableButton} />} />
+          <Route path='/movies' element={<ProtectedRouteElement element={Movies} loggedIn={isLoggedIn} movies={movies}  savedMovies={savedFilmsList} handleLike={createMovie} handleDislike={handleDeleteLike} />} />
+          <Route path='/saved-movies' element={<ProtectedRouteElement element={SavedMovies} loggedIn={isLoggedIn} movies={savedFilmsList} handleDelete={handleDeleteLike} isEmpty={isEmptySavedFilms} />} />
           <Route path='/signup' element={ <AuthRouteElement element={Register} loggedIn={isLoggedIn} onSubmit={handleSubmitRegisterForm} errorText={errorText} /> } />
-          {/* <Route path='/signup' element={<Register onSubmit={handleSubmitRegisterForm} errorText={errorText} />} /> */}
           <Route path='/signin' element={ <AuthRouteElement element={Login} loggedIn={isLoggedIn} onSubmit={handleSubmitLoginForm} errorText={errorText} /> } />
-          {/* <Route path='/signin' element={<Login onSubmit={handleSubmitLoginForm} errorText={errorText} />} /> */}
         </Routes>
         <Footer />
     </CurrentUserContext.Provider>

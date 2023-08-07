@@ -5,86 +5,71 @@ import Preloader from "../Preloader/Preloader";
 import filterFilms from "../../utils/FilterFilms";
 
 function Movies(props) {
-    // const [formValue, setFormValue] = React.useState(localStorage.getItem('filmName') ? localStorage.getItem('filmName') : '');
-    // const [isLongFilm, setIsLongFilm] = React.useState(localStorage.getItem('filmDuration') ? localStorage.getItem('filmDuration') : false);
-
-    // const [searchFilms, setSearchFilms] = React.useState(JSON.parse(localStorage.getItem('films')) ? JSON.parse(localStorage.getItem('films')) : []);
     const [isPreloaderEnable, setIsPreloaderEnable] = React.useState(false);
-    // const [isSavedMovieList, setIsSavedMovieList] = React.useState(JSON.parse(localStorage.getItem('films')) ? true : false);
-
-    // function handleChange(value) {
-    //     if (!value) {
-    //         setIsSavedMovieList(false);
-    //         localStorage.removeItem('filmName');
-    //     }
-    //     setFormValue(value);
-    // }
-
-    // async function handleClick() {
-    //     localStorage.setItem('filmDuration', !isLongFilm);
-    //     await setIsLongFilm(!isLongFilm);
-    //     handleSubmit();
-    // }
-
-    // function handleSubmit() {
-    //     setIsSavedMovieList(true);
-    //     const film = props.movies.filter((film) => filterFilms(film, formValue, isLongFilm, true));
-    //     localStorage.setItem('films', JSON.stringify(film));
-    //     setSearchFilms(film);
-    //     setIsPreloaderEnable(true);
-    //     setTimeout(() => {
-    //         setIsPreloaderEnable(false);
-    //     }, 2000);
-    // }
-
-    // React.useEffect(() => {
-    //     if (formValue === '' && !localStorage.getItem('filmDuration')) {
-    //         setIsSavedMovieList(false);
-    //     }
-    // }, [isLongFilm]);
     
-    // чекбокс. true - длинные фильмы, false - короткометражки
-    const [isClicked, setIsClicked] = React.useState(localStorage.getItem('isClicked') ? localStorage.getItem('isClicked') : '');
-    const [input, setInput] = React.useState(localStorage.getItem('movieName') ? localStorage.getItem('movieName') : '');
+    // // чекбокс. true - все фильмы, false - короткометражки
+    const [isClicked, setIsClicked] = React.useState(() => {
+        return localStorage.getItem('isClicked') ? JSON.parse(localStorage.getItem('isClicked')) : true
+    });
+    const [input, setInput] = React.useState(() => {
+        return localStorage.getItem('input') ? localStorage.getItem('input') : ''
+    });
+    const allMovies = JSON.parse(localStorage.getItem('allMovies')) ? JSON.parse(localStorage.getItem('allMovies')) : [];
 
-    // найденные фильмы
-    const [searchMovies, setSearchMovies] = React.useState(JSON.parse(localStorage.getItem('movies')) ? JSON.parse(localStorage.getItem('movies')) : []);
+    // // найденные фильмы
+    const [searchMovies, setSearchMovies] = React.useState(localStorage.getItem('searchMovies') ? JSON.parse(localStorage.getItem('searchMovies')) : allMovies);
+
+    React.useEffect(() => {
+        const localSearchMovies = localStorage.getItem('searchMovies') ? JSON.parse(localStorage.getItem('searchMovies')) : allMovies;
+        const localInput = localStorage.getItem('input') ? localStorage.getItem('input') : '';
+
+        setInput(localInput);
+        setSearchMovies(localSearchMovies);
+    }, []);
+
+    function enablePreloader() {
+        setIsPreloaderEnable(true);
+        setTimeout(() => {setIsPreloaderEnable(false)}, 2000);
+    }
 
     async function handleClick() {
-        await setIsClicked(!isClicked);
+        localStorage.setItem('isClicked', JSON.stringify(!isClicked));
+        await setIsClicked(isClicked => !isClicked);
     }
 
     function handleChange(value) {
+        localStorage.setItem('input', value);
         setInput(value);
+        if (value === '') {
+            if (isClicked) {
+                enablePreloader();
+                localStorage.setItem('searchMovies', JSON.stringify(allMovies));
+                setSearchMovies(allMovies);
+            } else {
+                handleSubmit();
+            }
+            
+        }
     }
 
     async function handleSubmit() {
-        setIsPreloaderEnable(true);
-        setTimeout(() => {setIsPreloaderEnable(false)}, 2000);
-        const movies = await props.movies.filter((movie) => filterFilms(movie, input, isClicked));
+        enablePreloader();
+        let movies = await props.movies.filter( (movie) =>  filterFilms(movie, input, isClicked));
+        if (movies === [] && input === '' && isClicked) {
+            movies = props.movies;
+        }
+        localStorage.setItem('searchMovies', JSON.stringify(movies));
         setSearchMovies(movies);
     }
 
     React.useEffect(() => {
-        localStorage.setItem('isClicked', isClicked);
         handleSubmit();
     }, [isClicked]);
-
-    React.useEffect(() => {
-        localStorage.setItem('movies', JSON.stringify(searchMovies));
-    }, [searchMovies]);
-
-    React.useEffect(() => {
-        localStorage.setItem('movieName', input);
-        if (input === '') {
-            setSearchMovies(props.movies);
-        }
-    }, [input]);
 
     return(
         <main className="movies">
             <SearchForm isClicked={isClicked} input={input} handleClick={handleClick} handleChange={handleChange} handleSubmit={handleSubmit} />
-            <MoviesCardList movies={searchMovies} savedMovies={props.savedMovies} handleLike={props.handleLike} isPreloaderEnable={isPreloaderEnable} />
+            <MoviesCardList movies={searchMovies} savedMovies={props.savedMovies} handleLike={props.handleLike} handleDislike={props.handleDislike} isPreloaderEnable={isPreloaderEnable} />
             <Preloader isEnable={isPreloaderEnable} />
         </main>
     );

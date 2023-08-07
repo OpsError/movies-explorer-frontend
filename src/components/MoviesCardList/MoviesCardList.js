@@ -12,7 +12,6 @@ function MoviesCardList(props) {
     const [isButtonDisable, setIsButtonDisable] = React.useState(false);
 
     function handleClickButton() {
-        if (location.pathname === '/movies') {
             if (window.innerWidth > LAPTOP_WIDTH) {
                 if (movieList.length > (arr.length + LAPTOP_COUNT)) {
                     setIsButtonDisable(false);
@@ -38,7 +37,6 @@ function MoviesCardList(props) {
                     setArr(movieList.slice(0, props.movies.length));
                 }
             }
-        }
         
     }
 
@@ -48,7 +46,7 @@ function MoviesCardList(props) {
                 setArr(movieList.slice(0, LAPTOP_COUNT));
                 setIsButtonDisable(false);
              } else if (movieList.length <= LAPTOP_COUNT) {
-                setArr(movieList.slice(0, LAPTOP_COUNT));
+                setArr(movieList);
                 setIsButtonDisable(true);
              }
         } else if (window.innerWidth > MOBILE_WIDTH && window.innerWidth <= TABLET_WIDTH) {
@@ -56,7 +54,7 @@ function MoviesCardList(props) {
                 setArr(movieList.slice(0, TABLET_COUNT));
                 setIsButtonDisable(false);
              } else if (movieList.length <= TABLET_COUNT) {
-                setArr(movieList.slice(0, TABLET_COUNT));
+                setArr(movieList);
                 setIsButtonDisable(true);
              }
         } else if (window.innerWidth <= MOBILE_WIDTH && props.movies.length > 5) {
@@ -64,12 +62,12 @@ function MoviesCardList(props) {
                 setArr(movieList.slice(0, MOBILE_COUNT));
                 setIsButtonDisable(false);
              } else if (movieList.length <= MOBILE_COUNT) {
-                setArr(movieList.slice(0, MOBILE_COUNT));
+                setArr(movieList);
                 setIsButtonDisable(true);
              }
         }
     }, [movieList]);
-    
+
     return(
         !props.isPreloaderEnable && <section className="list">
             <ul className={`list__container ${!movieList ? "list__container_disable" : ""}`} >
@@ -88,13 +86,15 @@ function MoviesCardList(props) {
                         nameRU={movie.nameRU}
                         nameEN={movie.nameEN}
                         key={movie.id}
+                        savedId={savedList.find(film => film.movieId === movie.id)}
                         isLiked={savedList.some(film => film.movieId === movie.id)}
-                        onClick={props.handleLike}
+                        handleLike={props.handleLike}
+                        handleDislike={props.handleDislike}
                         /> 
                     ))
                     : null }
                 { location.pathname === '/saved-movies' && !props.isEmpty ?
-                    arr.map( (movie) => (
+                    movieList.map( (movie) => (
                         <MoviesCard 
                         country={movie.country}
                         director={movie.director}

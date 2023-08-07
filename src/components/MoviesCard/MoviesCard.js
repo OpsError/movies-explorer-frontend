@@ -8,11 +8,11 @@ function MoviesCard(props) {
     function saveMovie() {
         if (isLiked) {
             setIsLiked(
-                props.onDelete(props._id)
+                props.handleDislike(props.savedId._id)
             );
         } else {
             setIsLiked(
-                props.onClick({
+                props.handleLike({
                     country: props.country,
                     director: props.director,
                     duration: props.duration,
@@ -30,9 +30,7 @@ function MoviesCard(props) {
     }
 
     function deleteMovie() {
-        setIsLiked(
-            props.onDelete(props._id)
-        );
+        props.onDelete(props._id);
     }
     return(
         <li className="card">
@@ -46,7 +44,7 @@ function MoviesCard(props) {
                     <h2 className="card__name">{props.nameRU}</h2>
                     {
                         location.pathname === '/movies' ?
-                        <button type="button" disabled={isLiked} className={`card__like ${isLiked? "card__like_active" : ""}`} onClick={saveMovie} />
+                        <button type="button" className={`card__like ${isLiked? "card__like_active" : ""}`} onClick={saveMovie} />
                         :
                         <button type="button" className="card__delete" onClick={deleteMovie} />
                     }

@@ -21,7 +21,7 @@ function SearchForm(props) {
                         <img src={searchIcon} alt="Иконка поиска" />
                     </button>
                 </div>
-                <FilterCheckbox handleClick={props.handleClick} isClicked={props.isClicked} />
+                <FilterCheckbox handleClick={props.handleClick} isClicked={props.isClicked} handleSubmit={props.handleSubmit} />
             </form>
         </section>
     );
