@@ -7,7 +7,6 @@ import Footer from '../Footer/Footer';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
-import ProfileEdit from '../ProfileEdit/ProfileEdit';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import NotFound from '../NotFound/NotFound';
@@ -38,12 +37,24 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  function getAllMovies() {
+    moviesApi.getMovies()
+      .then(async (res) => {
+        setMovies(res);
+        localStorage.setItem('allMovies', JSON.stringify(res));
+      })
+      .catch(() => setIsOpenPopup({
+        isOpen: true,
+        text: "Что-то пошло не так"
+      }));
+  }
+
   // регистрация
   function handleSubmitRegisterForm({ name, email, password }) {
     mainApi.signup({ name, email, password })
     .then((res) => {
-      handleSubmitLoginForm({ email, password });
       setIsLoggedIn(true);
+      handleSubmitLoginForm({ email, password });
     })
     .catch((err) => {
       if (err.status === 400) {
@@ -62,6 +73,8 @@ function App() {
         localStorage.setItem('token', res.token);
         handleCheckToken();
         setIsLoggedIn(true);
+        getSavedMovies();
+        getAllMovies();
         navigate('/movies', { replace: true });
       }
     })
@@ -143,21 +156,12 @@ function App() {
   }
 
   // получение фильмов
-  React.useEffect(() => {
-    if (isLoggedIn) {
-      moviesApi.getMovies()
-      .then((res) => {
-        setMovies(res);
-        localStorage.setItem('allMovies', JSON.stringify(res));
-      })
-      .catch(() => setIsOpenPopup({
-        isOpen: true,
-        text: "Что-то пошло не так"
-      }));
-
-      getSavedMovies();
-    }
-  }, [isLoggedIn]);
+  // React.useEffect(() => {
+  //   if (isLoggedIn) {
+  //     getSavedMovies();
+  //     getAllMovies();
+  //   }
+  // }, [isLoggedIn]);
 
   // сохранить в избранные
   function createMovie({ 

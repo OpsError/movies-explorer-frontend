@@ -14,17 +14,18 @@ function Movies(props) {
     const [input, setInput] = React.useState(() => {
         return localStorage.getItem('input') ? localStorage.getItem('input') : ''
     });
-    const allMovies = JSON.parse(localStorage.getItem('allMovies')) ? JSON.parse(localStorage.getItem('allMovies')) : [];
+    const allMovies = JSON.parse(localStorage.getItem('allMovies'));
 
     // // найденные фильмы
-    const [searchMovies, setSearchMovies] = React.useState(localStorage.getItem('searchMovies') ? JSON.parse(localStorage.getItem('searchMovies')) : allMovies);
+    const [searchMovies, setSearchMovies] = React.useState(localStorage.getItem('searchMovies') ? JSON.parse(localStorage.getItem('searchMovies')) : []);
 
     React.useEffect(() => {
-        const localSearchMovies = localStorage.getItem('searchMovies') ? JSON.parse(localStorage.getItem('searchMovies')) : allMovies;
+        const localSearchMovies = JSON.parse(localStorage.getItem('searchMovies')) ? JSON.parse(localStorage.getItem('searchMovies')) : allMovies;
         const localInput = localStorage.getItem('input') ? localStorage.getItem('input') : '';
 
-        setInput(localInput);
         setSearchMovies(localSearchMovies);
+        setInput(localInput);
+        handleSubmit();
     }, []);
 
     function enablePreloader() {
@@ -52,12 +53,9 @@ function Movies(props) {
         }
     }
 
-    async function handleSubmit() {
+    function handleSubmit() {
         enablePreloader();
-        let movies = await props.movies.filter( (movie) =>  filterFilms(movie, input, isClicked));
-        if (movies === [] && input === '' && isClicked) {
-            movies = props.movies;
-        }
+        let movies = props.movies.filter( (movie) =>  filterFilms(movie, input, isClicked));
         localStorage.setItem('searchMovies', JSON.stringify(movies));
         setSearchMovies(movies);
     }
@@ -66,10 +64,18 @@ function Movies(props) {
         handleSubmit();
     }, [isClicked]);
 
+    const moviesForList = () => {
+        if (searchMovies.length === 0 && isClicked && input === '') {
+            return props.movies;
+        } else {
+            return searchMovies;
+        }
+    }
+
     return(
         <main className="movies">
             <SearchForm isClicked={isClicked} input={input} handleClick={handleClick} handleChange={handleChange} handleSubmit={handleSubmit} />
-            <MoviesCardList movies={searchMovies} savedMovies={props.savedMovies} handleLike={props.handleLike} handleDislike={props.handleDislike} isPreloaderEnable={isPreloaderEnable} />
+            <MoviesCardList movies={(searchMovies.length === 0 && isClicked && input === '') ? props.movies : searchMovies} savedMovies={props.savedMovies} handleLike={props.handleLike} handleDislike={props.handleDislike} isPreloaderEnable={isPreloaderEnable} />
             <Preloader isEnable={isPreloaderEnable} />
         </main>
     );
