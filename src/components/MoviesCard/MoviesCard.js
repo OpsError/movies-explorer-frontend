@@ -7,25 +7,25 @@ function MoviesCard(props) {
 
     function saveMovie() {
         if (isLiked) {
-            setIsLiked(
-                props.handleDislike(props.savedId._id)
-            );
+            props.handleDislike(props.savedId._id)
+            .then((res) => setIsLiked(res))
+            .catch((err) => setIsLiked(err));
         } else {
-            setIsLiked(
-                props.handleLike({
-                    country: props.country,
-                    director: props.director,
-                    duration: props.duration,
-                    year: props.year,
-                    description: props.description,
-                    image: `https://api.nomoreparties.co/${props.image}`,
-                    trailerLink: props.trailerLink,
-                    thumbnail: `https://api.nomoreparties.co/${props.thumbnail}`,
-                    movieId: props.movieId,
-                    nameRU: props.nameRU,
-                    nameEN: props.nameEN
-                })
-            );
+            props.handleLike({
+                country: props.country,
+                director: props.director,
+                duration: props.duration,
+                year: props.year,
+                description: props.description,
+                image: `https://api.nomoreparties.co/${props.image}`,
+                trailerLink: props.trailerLink,
+                thumbnail: `https://api.nomoreparties.co/${props.thumbnail}`,
+                movieId: props.movieId,
+                nameRU: props.nameRU,
+                nameEN: props.nameEN
+            })
+            .then((res) => setIsLiked(res))
+            .catch((err) => setIsLiked(err));
         }
     }
 

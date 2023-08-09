@@ -2,7 +2,6 @@ import React from "react";
 import FormEdit from "../FormEdit/FormEdit";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import { validateName, validateEmail } from "../../utils/ValidateInput";
-import { useNavigate } from "react-router-dom";
 
 function ProfileEdit(props) {
     const currentUser = React.useContext(CurrentUserContext);
@@ -11,21 +10,20 @@ function ProfileEdit(props) {
         name: currentUser.name,
         email: currentUser.email,
     });
-    const [isButtonDisable, setIsButtonDisable] = React.useState(false);
+    const [isButtonDisable, setIsButtonDisable] = React.useState(true);
     const [isSameInputs, setIsSameInputs] = React.useState(false);
-    const navigate = useNavigate();
 
     function handleSubmit(e) {
         e.preventDefault();
         props.onSubmit({
             name: formValue.name,
             email: formValue.email
-        });
-        setIsButtonDisable(true);
-        navigate("/profile")
+        })
+        .then((res) =>setIsButtonDisable(res));
     }
 
     function handleChange(e) {
+        setIsButtonDisable(false);
         const { name, value } = e.target;
         setFormValue({
         ...formValue,
@@ -77,7 +75,7 @@ function ProfileEdit(props) {
                 <span className="profile__error">
                     {props.errorText}
                 </span>
-                <button type="submit" onSubmit={handleSubmit} disabled={!isInvalidData || props.isDisableButton || isButtonDisable || isSameInputs} className={`profile__edit profile__edit_color_blue ${ (!isInvalidData || isButtonDisable || isSameInputs) && "profile__edit_disabled" }`}>
+                <button type="submit" onSubmit={handleSubmit} disabled={!isInvalidData || isButtonDisable || isSameInputs} className={`profile__edit profile__edit_color_blue ${ (!isInvalidData || isButtonDisable || isSameInputs) && "profile__edit_disabled" }`}>
                     Сохранить
                 </button>
               </div>

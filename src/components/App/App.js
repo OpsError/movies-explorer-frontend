@@ -28,7 +28,7 @@ function App() {
   const [errorText, setErrorText] = React.useState('');
   const [savedFilmsList, setSavedFilmsList] =React.useState([]);
   const [isEmptySavedFilms, setIsEmptySavedFilms] = React.useState(false);
-  const [isDisableButton, setIsDIsableButton] = React.useState(false);
+  // const [isDisableButton, setIsDIsableButton] = React.useState(false);
   const [isOpenPopup, setIsOpenPopup] = React.useState({
     isOpen: false,
     text: ''
@@ -40,13 +40,21 @@ function App() {
   function getAllMovies() {
     moviesApi.getMovies()
       .then(async (res) => {
-        setMovies(res);
+        await setMovies(res);
         localStorage.setItem('allMovies', JSON.stringify(res));
       })
       .catch(() => setIsOpenPopup({
         isOpen: true,
         text: "Что-то пошло не так"
       }));
+  }
+
+  function getSavedMovies() {
+    mainApi.getMovies()
+      .then((res) => {
+        setSavedFilmsList(res.reverse());
+      })
+      .catch(() => setIsEmptySavedFilms(true));
   }
 
   // регистрация
@@ -60,7 +68,10 @@ function App() {
       if (err.status === 400) {
         setErrorText('Пользователь с таким email уже существует.');
       } else {
-        setErrorText('При регистрации пользователя произошла ошибка.');
+        setIsOpenPopup({
+          isOpen: true,
+          text: "При регистрации произошла ошибка, попробуйте позже"
+        });
       }
     })
   }
@@ -73,16 +84,19 @@ function App() {
         localStorage.setItem('token', res.token);
         handleCheckToken();
         setIsLoggedIn(true);
+        navigate('/movies', { replace: true });
         getSavedMovies();
         getAllMovies();
-        navigate('/movies', { replace: true });
       }
     })
     .catch((err) => {
       if (err.status === 401) {
         setErrorText('Вы ввели неправильный логин или пароль.');
       } else {
-        setErrorText('Что-то пошло не так...')
+        setIsOpenPopup({
+          isOpen: true,
+          text: "При авторизации произошла ошибка, попробуйте позже"
+        });
       }
     })
   }
@@ -124,10 +138,9 @@ function App() {
 
   // обновить профиль
   function patchProfile({ name, email }) {
-    setIsDIsableButton(true);
-    mainApi.patchInfo({ name, email })
-    .then(async (res) => {
-      await setCurrentUser({
+    return mainApi.patchInfo({ name, email })
+    .then((res) => {
+      setCurrentUser({
         name: res.name,
         email: res.email
       });
@@ -136,39 +149,29 @@ function App() {
         isOpen: true,
         text: "Данные успешно обновлены"
       });
+      setErrorText('');
+      return false;
     })
     .catch(err => {
-      if (err.status === 500) {
-        setErrorText('При обновлении профиля произошла ошибка.');
-      } else {
+      if (err.status === 400) {
         setErrorText('Пользователь с таким email уже существует.');
+        return true;
+      } else {
+        setIsOpenPopup({
+          isOpen: true,
+          text: "Произошла ошибка, попробуйте позже"
+        });
+        return true; 
       }
     });
-    setIsDIsableButton(false);
   }
-
-  function getSavedMovies() {
-    mainApi.getMovies()
-      .then((res) => {
-        setSavedFilmsList(res.reverse());
-      })
-      .catch(() => setIsEmptySavedFilms(true));
-  }
-
-  // получение фильмов
-  // React.useEffect(() => {
-  //   if (isLoggedIn) {
-  //     getSavedMovies();
-  //     getAllMovies();
-  //   }
-  // }, [isLoggedIn]);
 
   // сохранить в избранные
   function createMovie({ 
     country, director, duration, year, description, image, trailerLink, thumbnail,
     movieId, nameRU, nameEN
    }) {
-    mainApi.postMovies({
+    return mainApi.postMovies({
       country, director, duration,year, description, image, trailerLink, thumbnail,
       movieId, nameRU, nameEN
     })
@@ -190,26 +193,32 @@ function App() {
         },
         ...savedFilmsList
       ]);
+      return true;
     })
-    .catch(() => setIsOpenPopup({
-      isOpen: true,
-      text: "Произошла ошибка, попробуйте позже"
-    }));
-    return true;
+    .catch(() => {
+      setIsOpenPopup({
+        isOpen: true,
+        text: "Произошла ошибка, попробуйте позже"
+      });
+      return false;
+    });
    }
 
   //  удалить из избранных
-    function handleDeleteLike(movieId) {
-      mainApi.deleteMovies(movieId)
-      .then(async() => {
-        await setSavedFilmsList(savedFilmsList.filter(item => item._id !== movieId));
-      })
-      .catch(() => setIsOpenPopup({
+  function handleDeleteLike(movieId) {
+    return mainApi.deleteMovies(movieId)
+    .then(() => {
+      setSavedFilmsList(savedFilmsList.filter(item => item._id !== movieId));
+      return false;
+    })
+    .catch(() => {
+      setIsOpenPopup({
         isOpen: true,
         text: "Произошла ошибка, попробуйте позже"
-      }));
-      return false;
-   }
+      });
+      return true;
+    });
+  }
 
 // закрытие попапов
 function closeAllPopups() {
@@ -243,8 +252,8 @@ React.useEffect(() => {
         <Routes>
           <Route path='/*' element={<NotFound />} />
           <Route path='/' element={<Main />} />
-          <Route path='/profile/*' element={<ProtectedRouteElement element={Profile} loggedIn={isLoggedIn} signout={signOut} onSubmit={patchProfile} errorText={errorText} isDisableButton={isDisableButton} />} />
-          <Route path='/movies' element={<ProtectedRouteElement element={Movies} loggedIn={isLoggedIn} movies={movies}  savedMovies={savedFilmsList} handleLike={createMovie} handleDislike={handleDeleteLike} />} />
+          <Route path='/profile/*' element={<ProtectedRouteElement element={Profile} loggedIn={isLoggedIn} signout={signOut} onSubmit={patchProfile} errorText={errorText} />} />
+          <Route path='/movies' element={<ProtectedRouteElement element={Movies} loggedIn={isLoggedIn} movies={movies} savedMovies={savedFilmsList} handleLike={createMovie} handleDislike={handleDeleteLike} />} />
           <Route path='/saved-movies' element={<ProtectedRouteElement element={SavedMovies} loggedIn={isLoggedIn} movies={savedFilmsList} handleDelete={handleDeleteLike} isEmpty={isEmptySavedFilms} />} />
           <Route path='/signup' element={ <AuthRouteElement element={Register} loggedIn={isLoggedIn} onSubmit={handleSubmitRegisterForm} errorText={errorText} /> } />
           <Route path='/signin' element={ <AuthRouteElement element={Login} loggedIn={isLoggedIn} onSubmit={handleSubmitLoginForm} errorText={errorText} /> } />

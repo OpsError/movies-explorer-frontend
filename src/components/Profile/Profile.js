@@ -36,7 +36,7 @@ function Profile(props) {
             </div>
         </main>
       } />
-      <Route path="/edit" element={ <ProfileEdit onSubmit={props.onSubmit} />} />
+      <Route path="/edit" element={ <ProfileEdit onSubmit={props.onSubmit} errorText={props.errorText} />} />
     </Routes>
   )
 }

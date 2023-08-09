@@ -9,11 +9,17 @@ function Register(props) {
         password: ''
     });
 
+    const [isEmptyInputs, setIsEmptyInputs] = React.useState(false);
+
     const [isValidInput, setIsValidInput] = React.useState({
         name: true,
         email: true,
         password: true
     });
+
+    function setButtonDisable(value) {
+        value === '' ? setIsEmptyInputs(true) : setIsEmptyInputs(false);
+    }
 
     function handleChange(e) {
         const {name, value} = e.target;
@@ -25,29 +31,41 @@ function Register(props) {
             setIsValidInput({
                 ...isValidInput,
                 name: validateName(value)
-            })
+            });
         } else if (name === 'email') {
             setIsValidInput({
                 ...isValidInput,
                 email: validateEmail(value)
-            })
+            });
         } else if (name === 'password') {
             setIsValidInput({
                 ...isValidInput,
                 password: validatePassword(value)
-            })
+            });
         }
     }
 
     function handleSubmit(e) {
         e.preventDefault();
         props.onSubmit(formValue);
-        setFormValue({
-            name: '',
-            email: '',
-            password: ''
-        });
     }
+
+    React.useEffect(() => {
+        setButtonDisable(formValue.name);
+        setButtonDisable(formValue.email);
+        setButtonDisable(formValue.password);
+    }, [formValue]);
+
+    React.useEffect(() => {
+        if (props.isLoggedIn) {
+            setFormValue({
+                name: '',
+                email: '',
+                password: ''
+            });
+        }
+        
+    }, [props.isLoggedIn]);
 
     const isInvalidInputs = !isValidInput.name || !isValidInput.email || !isValidInput.password;
     
@@ -73,7 +91,7 @@ function Register(props) {
                 
                 <div className="form__submit-container">
                     <span className="form__error-response">{props.errorText}</span>
-                    <button type="submit" disabled={isInvalidInputs} className='form__submit'>Зарегистрироваться</button>
+                    <button type="submit" disabled={isInvalidInputs || isEmptyInputs} className={`form__submit ${isEmptyInputs ? 'form__submit_disabled' : ''}`}>Зарегистрироваться</button>
                 </div>
                 
             </AuthForm>

@@ -24,11 +24,16 @@ function Login(props) {
     function handleSubmit(e) {
         e.preventDefault();
         props.onSubmit(formValue);
-        setFormValue({
-            email: '',
-            password: ''
-        });
     }
+
+    React.useEffect(() => {
+        if (props.isLoggedIn) {
+            setFormValue({
+                email: '',
+                password: ''
+            });
+        }
+    }, [props.isLoggedIn]);
     return(
         <AuthForm section="login" buttonText="" text="Ещё не зарегистрированы?" linkText="Регистрация" path="/signup" submitClass="form__submit_margin_top" handleSubmit={handleSubmit}>
             <div className="form__element">

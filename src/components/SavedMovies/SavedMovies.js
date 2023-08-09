@@ -11,7 +11,7 @@ function SavedMovies(props) {
     const [input, setInput] = React.useState('');
 
     // найденные фильмы
-    const [searchMovies, setSearchMovies] = React.useState(props.movies);
+    const [searchMovies, setSearchMovies] = React.useState([]);
 
     async function handleClick() {
         await setIsClicked(isClicked => !isClicked);
@@ -25,6 +25,7 @@ function SavedMovies(props) {
                 localStorage.setItem('searchMovies', JSON.stringify(props.movies));
                 setSearchMovies(props.movies);
             } else {
+                enablePreloader();
                 handleSubmit();
             }
             
@@ -37,28 +38,23 @@ function SavedMovies(props) {
     }
 
     async function handleSubmit() {
-        enablePreloader();
         const movies = await props.movies.filter((movie) => filterFilms(movie, input, isClicked));
         setSearchMovies(movies);
     }
 
-    function handleDelete(movieId) {
-        setSearchMovies(props.movies.filter(item => item._id !== movieId));
-        props.handleDelete(movieId);
-    }
-
     React.useEffect(() => {
+        enablePreloader();
         handleSubmit();
     }, [isClicked]);
 
     React.useEffect(() => {
         setSearchMovies(props.movies);
-    }, []);
-
+        handleSubmit();
+    }, [props.movies]);
     return(
         <main className="saved">
             <SearchForm handleSubmit={handleSubmit} handleChange={handleChange} handleClick={handleClick} isClicked={isClicked} formValue={input} />
-            <MoviesCardList movies={searchMovies} buttonDisable={true} handleDelete={handleDelete} isPreloaderEnable={isPreloaderEnable} />
+            <MoviesCardList movies={searchMovies} buttonDisable={true} handleDelete={props.handleDelete} isPreloaderEnable={isPreloaderEnable} />
             <Preloader isEnable={isPreloaderEnable} />
         </main>
     );

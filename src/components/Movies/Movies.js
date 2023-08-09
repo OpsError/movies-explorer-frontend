@@ -64,14 +64,6 @@ function Movies(props) {
         handleSubmit();
     }, [isClicked]);
 
-    const moviesForList = () => {
-        if (searchMovies.length === 0 && isClicked && input === '') {
-            return props.movies;
-        } else {
-            return searchMovies;
-        }
-    }
-
     return(
         <main className="movies">
             <SearchForm isClicked={isClicked} input={input} handleClick={handleClick} handleChange={handleChange} handleSubmit={handleSubmit} />
