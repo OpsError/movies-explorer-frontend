@@ -5,11 +5,8 @@ function AuthForm(props) {
     return(
         <main className={`form ${props.section}`}>
             <section className="form__container">
-                <form className="form__formset">
-                    {/* className="form__input_error" */}
+                <form className="form__formset" onSubmit={props.handleSubmit}>
                     {props.children}
-
-                    <button type="submit" className={`form__submit ${props.submitClass}`}>{props.buttonText}</button>
                 </form>
                 <p className="form__register">
                     { props.text }

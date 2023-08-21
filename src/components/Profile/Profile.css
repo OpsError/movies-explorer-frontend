@@ -83,6 +83,10 @@
     border: 1px solid #000;
 }
 
+.profile__element_error:focus-within {
+    border: 1px solid red;
+}
+
 .profile__border {
     border-bottom: 1px solid #E8E8E8;
 }

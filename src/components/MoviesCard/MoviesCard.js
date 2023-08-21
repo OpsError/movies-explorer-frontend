@@ -2,30 +2,55 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 
 function MoviesCard(props) {
-    const [like, setLike] = React.useState(props.like);
-
+    const [isLiked, setIsLiked] = React.useState(props.isLiked);
     const location = useLocation();
 
     function saveMovie() {
-        setLike(!like);
+        if (isLiked) {
+            props.handleDislike(props.savedId._id)
+            .then((res) => setIsLiked(res))
+            .catch((err) => setIsLiked(err));
+        } else {
+            props.handleLike({
+                country: props.country,
+                director: props.director,
+                duration: props.duration,
+                year: props.year,
+                description: props.description,
+                image: `https://api.nomoreparties.co/${props.image}`,
+                trailerLink: props.trailerLink,
+                thumbnail: `https://api.nomoreparties.co/${props.thumbnail}`,
+                movieId: props.movieId,
+                nameRU: props.nameRU,
+                nameEN: props.nameEN
+            })
+            .then((res) => setIsLiked(res))
+            .catch((err) => setIsLiked(err));
+        }
+    }
+
+    function deleteMovie() {
+        props.onDelete(props._id);
     }
     return(
         <li className="card">
-            <div className="card__image-container">
-                <img src={props.image} className="card__image" alt={props.name} />
+            <div className="card__image-container" >
+                <a href={props.trailerLink} target="_blank" rel="noreferrer">
+                    <img src={location.pathname === '/movies' ? `https://api.nomoreparties.co/${props.image}` : props.image} className="card__image" alt={props.name} />
+                </a>
             </div>
-            <div className={`card__container ${location.pathname === '/saved-movies' ? 'card__container_cursor_pointer' : ''}`}>
+            <div className="card__container">
                 <div className="card__info-container">
-                    <h2 className="card__name">{props.name}</h2>
+                    <h2 className="card__name">{props.nameRU}</h2>
                     {
                         location.pathname === '/movies' ?
-                        <button type="button" className={`card__like ${like? "card__like_active" : ""}`} onClick={saveMovie} />
+                        <button type="button" className={`card__like ${isLiked? "card__like_active" : ""}`} onClick={saveMovie} />
                         :
-                        <button type="button" className="card__delete" />
+                        <button type="button" className="card__delete" onClick={deleteMovie} />
                     }
                     
                 </div>
-                <p className="card__time">{`${Math.floor(props.time/60)}ч ${props.time-(60*Math.floor(props.time/60))}м`}</p>
+                <p className="card__time">{`${Math.floor(props.duration/60)}ч ${props.duration-(60*Math.floor(props.duration/60))}м`}</p>
             </div>
         </li>
     );
